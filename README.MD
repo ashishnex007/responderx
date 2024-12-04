@@ -1,0 +1,11 @@
+## RESPONDERX
+ - [] donate.html - payment gateway
+ - [] landing page
+ - [] incident reporting 
+ - [] dashboard.html - volunteer dashboard - but needs design changes 
+ - [] dashboard.html - volunteer dashboard - needs to see the reports
+ - [] dashboard.html - volunteer dashboard - these people respond to the reports -> description, pics, critical level, what are the resorces needed (miniumum resources), casualties
+ - [] dashboard.html - a dashboard for government bodies
+ - [] ration.html
+ - [] better notification system
+ - [] SOS call 

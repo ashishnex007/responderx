@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Crowdsourced Disaster Response Platform</title>
+	<style>
+		body {
+			background-color: #fff; /* White background */
+			font-family: Arial, sans-serif;
+		}
+		
+		/* Navbar Style */
+		.navbar {
+			display: flex; /* Use Flexbox to align items */
+			justify-content: center; /* Center the items horizontally */
+			background-color: #333; /* Dark gray background for navbar */
+			padding: 10px;
+		}
+
+		.navbar a {
+			color: #fff; /* White text color */
+			text-decoration: none;
+			margin: 0 20px; /* Space out the links */
+			font-size: 25px;
+		}
+		
+		.container {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 20px;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #FFD700; /* Light gray background for container */
+			border-radius: 10px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+		
+		/* Styling for the Title (inside container) */
+		.title {
+			grid-column: 1 / 5; /* Make the title span across all columns */
+			text-align: center; /* Center the title text */
+			color: #333; /* Dark text color */
+			font-size: 45px; /* Larger font for the title */
+			line-height: 1.1; /* Adjust line height for title */
+			margin-bottom: 5px; /* Space below the title */
+		}
+		
+		.card {
+			background-color: #fff; /* White background for cards */
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-direction: column;
+			justify-content: center; /* Center content vertically */
+			align-items: center; /* Center content horizontally */
+			text-align: center; /* Ensure text is centered */
+			min-height: 250px; /* Set a minimum height for each card */
+		}
+
+		.card h2 {
+			color: #333;
+			font-size: 24px;
+			margin-bottom: 15px; /* Space between heading and button */
+		}
+		
+		.card p {
+			color: #555;
+			font-size: 16px;
+			margin-bottom: 20px; /* Space between text and button */
+		}
+		
+		.button {
+			background-color: #007bff; /* Blue button color */
+			color: #fff; /* White button text color */
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+			margin-top: 10px;
+		}
+		
+		.button:hover {
+			background-color: #0056b3; /* Darker blue button color on hover */
+		}
+	</style>
+</head>
+<body>
+	<div class="navbar">
+		<a href="about.html">About</a>
+		<a href="contact.html">Contact</a>
+	</div>
+
+	<div class="container">
+		<!-- Title inside the container -->
+		<h1 class="title">Crowdsourced Disaster Response Platform</h1>
+
+		<div class="card">
+            <h2>Incident Reporting</h2>
+            <p>Receive instant alerts & updates.</p>
+            <button class="button" onclick="window.location.href='incident_reporting.html'">Report Incident</button>
+        </div>
+		<div class="card">
+			<h2>Resources Management</h2>
+			<p>Manage and track resources effectively.</p>
+			<button class="button" onclick="window.location.href='resources.html'">Resources</button>
+		</div>
+		<div class="card">
+			<h2>Donate</h2>
+			<p>Donate money or resources for the victims.</p>
+			<button class="button" onclick="window.location.href='donate.html'">Donate</button>
+		</div>
+		<div class="card">
+			<h2>Volunteer Management</h2>
+			<p>Connect and manage volunteers.</p>
+			<button class="button" onclick="window.location.href='volunteers.html'">Join</button>
+		</div>
+		<div class="card">
+			<h2>Mental Health Support</h2>
+			<p>Connect with counselors and therapists.</p>
+			<button class="button" onclick="window.location.href='health_support.html'">Support</button>
+		</div>
+		<div class="card">
+			<h2>Number of Volunteers</h2>
+			<p>Need to join</p>
+		</div>
+		<div class="card">
+			<h2>Number of Reports</h2>
+			<p>No reports available</p>
+		</div>
+		<div class="card">
+			<h2>Donated Resources</h2>
+			<p>No donations yet</p>
+		</div>
+	</div>
+</body>
+</html>

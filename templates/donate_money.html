@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Money</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #003366;
+            text-align: center;
+        }
+        .form-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-size: 18px;
+            color: #003366;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .payment-methods {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .payment-logo {
+            width: 120px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .payment-logo:hover {
+            transform: scale(1.1);
+        }
+        .submit-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .flash-messages {
+            margin-bottom: 20px;
+            background-color: #f8d7da;
+            padding: 15px;
+            border-radius: 8px;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash-message {
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            .payment-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="donate.html">back</a>
+           
+        </nav>
+        <h1>Donate Money</h1>
+        
+          
+        <!-- Flash Messages -->
+      
+        <div class="flash-messages">
+            <p class="flash-message">Thank you for your generosity! Please fill out the form below to make a donation. Your contribution can help us make a meaningful impact.</p>
+        </div>
+        
+
+           
+
+        <!-- Donation Form -->
+        <div class="form-container">
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Donation Amount (INR)</label>
+                <input type="number" id="amount" name="amount" placeholder="Enter amount to donate" required>
+            </div>
+
+           
+        </div>
+
+        <!-- Payment Method Selection -->
+        <h2>Choose Payment Method</h2>
+        <div class="payment-methods">
+            <img src="images/google_pay.png" alt="Google Pay" class="payment-logo">
+            <img src="images/phone_pay.png" alt="PhonePe" class="payment-logo">
+            <img src="images/paytm.jpg" alt="Paytm" class="payment-logo">
+        </div>
+
+        <!-- Submit Button -->
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="submit-btn">Donate Now</button>
+        </div>
+    </div>
+</body>
+</html>

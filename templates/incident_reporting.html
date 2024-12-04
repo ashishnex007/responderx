@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Reporting and Management</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            padding: 20px;
+        }
+        form {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="datetime-local"], select, input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #videoElement {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        #mediaOptions {
+            margin-bottom: 15px;
+        }
+        .media-display {
+            margin-top: 20px;
+        }
+        .media-display img, .media-display video {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+        .checkbox-group {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="dashboard.html">Home</a>
+        <a href="incident_reporting.html">Incident Reporting</a>
+    </nav>
+
+    <div class="container">
+        <h1>Incident Reporting and Management</h1>
+        <form id="incidentForm" action="{{ url_for('incident_reporting') }}" method="post" enctype="multipart/form-data">
+           
+            <label for="incidentType">Type of Disaster:</label>
+            <select id="incidentType" name="incidentType" required onchange="updateRequirements()">
+                <option value="">Select Type</option>
+                <option value="earthquake">Earthquake</option>
+                <option value="flood">Flood</option>
+                <option value="hurricane">Hurricane</option>
+                <option value="fire">Fire</option>
+                <option value="landslide">Landslide</option>
+                <option value="other">Other</option>
+            </select>
+
+            <div id="requirements" class="checkbox-group"></div>
+
+            <label for="incidentLocation">Location:</label>
+            <input type="text" id="incidentLocation" name="incidentLocation" placeholder="Enter the location or click on the map" required>
+            <button type="button" onclick="getLocation()">Use Current Location</button>
+
+            <div id="map"></div>
+
+            <label for="incidentDate">Date and Time:</label>
+            <input type="datetime-local" id="incidentDate" name="incidentDate" required>
+
+            <label for="incidentSeverity">Severity Level:</label>
+            <select id="incidentSeverity" name="incidentSeverity" required>
+                <option value="minor">Minor</option>
+                <option value="major">Major</option>
+                <option value="critical">Critical</option>
+            </select>
+
+            <label for="mediaUpload">Upload Media (Images, Videos):</label>
+            <div id="mediaOptions">
+                <button type="button" onclick="chooseMedia('photo')">Capture Photo</button>
+                <button type="button" onclick="chooseMedia('video')">Record Video</button>
+            </div>
+            <video id="videoElement" autoplay></video>
+            <button id="captureButton" type="button" style="display:none;" onclick="captureMedia()">Capture</button>
+            <canvas id="canvas" style="display:none;"></canvas>
+
+            <div class="media-display" id="mediaDisplay"></div>
+
+            <input type="submit" value="Report Incident">
+        </form>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h2>Feedback on Incident Reporting</h2>
+            <form action="submit_feedback.php" method="post">
+                <label for="feedbackName">Your Name:</label>
+                <input type="text" id="feedbackName" name="feedbackName" placeholder="Enter your name">
+
+                <label for="feedbackEmail">Your Email:</label>
+                <input type="email" id="feedbackEmail" name="feedbackEmail" placeholder="Enter your email" required style="width: 100%;">
+
+                <label for="feedbackMessage">Your Feedback:</label>
+                <textarea id="feedbackMessage" name="feedbackMessage" rows="4" placeholder="Share your feedback or suggestions" required></textarea>
+
+                <input type="submit" value="Submit Feedback">
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let marker;
+        let mediaType = '';
+
+        function initMap() {
+            map = L.map('map').setView([51.505, -0.09], 13);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function(event) {
+                placeMarker(event.latlng);
+                document.getElementById('incidentLocation').value = `Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}`;
+            });
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                marker.setLatLng(location);
+            } else {
+                marker = L.marker(location).addTo(map);
+            }
+            map.setView(location);
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    document.getElementById('incidentLocation').value = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                    let currentLocation = L.latLng(latitude, longitude);
+                    placeMarker(currentLocation);
+                    map.setView(currentLocation);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function updateRequirements() {
+            const disasterType = document.getElementById('incidentType').value;
+            const requirementsDiv = document.getElementById('requirements');
+            let requirements = [];
+
+            switch (disasterType) {
+                case 'earthquake':
+                    requirements = [
+                        'Search and rescue teams',
+                        'Medical assistance and first aid',
+                        'Temporary shelter and food'
+                    ];
+                    break;
+                case 'flood':
+                    requirements = [
+                        'Evacuation of affected areas',
+                        'Emergency food and water supplies',
+                        'Medical care for flood-related injuries',
+                        'Boats and other water transport for rescue'
+                    ];
+                    break;
+                case 'hurricane':
+                    requirements = [
+                        'Evacuation and shelter for those in the storm’s path',
+                        'Medical care for injuries and storm-related issues',
+                        'Provision of food, water, and emergency supplies',
+                        'Search and rescue operations',
+                        'Debris removal and cleanup'
+                    ];
+                    break;
+                case 'fire':
+                    requirements = [
+                        'Firefighting teams and equipment',
+                        'Evacuation of affected areas',
+                        'Medical care for burns and smoke inhalation',
+                        'Provision of temporary shelters and food',
+                        'Support for firefighters and first responders'
+                    ];
+                    break;
+                case 'landslide':
+                    requirements = [
+                        'Search and rescue operations for trapped individuals',
+                        'Medical care for injuries',
+                        'Evacuation of affected areas',
+                        'Clearing of landslide debris',
+                        'Provision of temporary shelter and food'
+                    ];
+                    break;
+                case 'other':
+                    requirements = [
+                        'Evacuation and rescue operations',
+                        'Emergency medical care',
+                        'Provision of food, water, and temporary shelter',
+                        'Support for emergency responders and victims'
+                    ];
+                    break;
+                default:
+                    requirements = [];
+            }
+
+            let html = '';
+            requirements.forEach(req => {
+                html += `<label><input type="checkbox" name="requirements[]" value="${req}"> ${req}</label>`;
+            });
+            requirementsDiv.innerHTML = html;
+        }
+
+        function chooseMedia(type) {
+            mediaType = type;
+            if (type === 'photo') {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
+                    document.getElementById('videoElement').srcObject = stream;
+                    document.getElementById('captureButton').style.display = 'block';
+                }).catch(error => {
+                    console.error('Error accessing media devices.', error);
+                });
+            } else if (type === 'video') {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+                    document.getElementById('videoElement').srcObject = stream;
+                    document.getElementById('captureButton').style.display = 'block';
+                }).catch(error => {
+                    console.error('Error accessing media devices.', error);
+                });
+            }
+        }
+
+        function captureMedia() {
+            const video = document.getElementById('videoElement');
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL();
+            const mediaDisplay = document.getElementById('mediaDisplay');
+            const mediaElement = mediaType === 'photo' ? `<img src="${dataUrl}" alt="Captured Photo">` : `<video src="${dataUrl}" controls></video>`;
+            mediaDisplay.innerHTML = mediaElement;
+
+            // Optionally, you can implement code to upload this dataUrl to your server
+        }
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>

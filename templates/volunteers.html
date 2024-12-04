@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Management</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+        }
+        nav { 
+            background-color: #333; 
+            padding: 10px; 
+        }
+        nav a { 
+            color: white; 
+            text-decoration: none; 
+            margin: 0 15px; 
+            font-size: 18px; 
+        }
+        nav a:hover { 
+            text-decoration: underline; 
+        }
+        .container { 
+            padding: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        h1 { 
+            margin-bottom: 20px; 
+        }
+        .form-container, .feedback-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        form input[type="text"], 
+        form input[type="email"], 
+        form input[type="tel"], 
+        form textarea,
+        form input[type="date"],
+        form input[type="file"] { 
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 15px; 
+            border-radius: 5px; 
+            border: 1px solid #ccc;
+        }
+        form input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        form input[type="submit"] {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        form input[type="submit"]:hover {
+            background-color: #555;
+        }
+        .volunteer-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .feedback-container h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .feedback-container input[type="text"], 
+        .feedback-container input[type="email"], 
+        .feedback-container textarea {
+            width: calc(100% - 22px); /* Adjust for padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .feedback-container input[type="submit"] {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .feedback-container input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible {
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .collapsible.active, .collapsible:hover {
+            background-color: #555;
+        }
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+        .content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .content li {
+            padding: 8px 0;
+        }
+        .content input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="dashboard.html">Home</a>
+    </nav>
+
+    <div class="container">
+        <h1>Volunteer Management</h1>
+
+        <!-- Join as a Volunteer Section -->
+        <div class="form-container">
+            <h2>Join as a Volunteer</h2>
+            <form id="volunteerForm" method="post" enctype="multipart/form-data">
+                <label for="volunteerName">Full Name:</label>
+                <input type="text" id="volunteerName" name="volunteerName" placeholder="Enter your full name" required>
+
+                <label for="volunteerEmail">Email:</label>
+                <input type="email" id="volunteerEmail" name="volunteerEmail" placeholder="Enter your email address" required>
+
+                <label for="volunteerPhone">Phone Number:</label>
+                <input type="tel" id="volunteerPhone" name="volunteerPhone" placeholder="Enter your phone number" required>
+
+                <label for="volunteerSkills">Skills:</label>
+
+                <!-- Main Skill Categories (Collapsibles) -->
+
+                <!-- Medical and Health Skills -->
+                <button type="button" class="collapsible">Medical and Health Skills</button>
+                <div class="content">
+                    <ul>
+                        <li><input type="checkbox" id="firstAid" name="skills[]" value="First Aid & CPR"> First Aid & CPR</li>
+                        <li><input type="checkbox" id="emt" name="skills[]" value="Emergency Medical Technician (EMT)"> Emergency Medical Technician (EMT)</li>
+                        <li><input type="checkbox" id="mentalHealth" name="skills[]" value="Mental Health Support"> Mental Health Support</li>
+                        <li><input type="checkbox" id="psychFirstAid" name="skills[]" value="Psychological First Aid"> Psychological First Aid</li>
+                    </ul>
+                </div>
+
+                <!-- Fundraising and Advocacy -->
+                <button class="collapsible" onclick="toggleSkills('fundraisingSkills')">Fundraising and Advocacy</button>
+                <div id="fundraisingSkills" class="content">
+                    <ul>
+                        <li><input type="checkbox" id="fundraising" name="skills[]" value="Fundraising"> Fundraising</li>
+                        <li><input type="checkbox" id="grantWriting" name="skills[]" value="Grant Writing"> Grant Writing</li>
+                    </ul>
+                </div>
+
+                <!-- Search and Rescue Skills -->
+                <button type="button" class="collapsible">Search and Rescue Skills</button>
+                <div class="content">
+                    <ul>
+                        <li><input type="checkbox" id="sar" name="skills[]" value="Search and Rescue (SAR)"> Search and Rescue (SAR)</li>
+                        <li><input type="checkbox" id="waterRescue" name="skills[]" value="Water Rescue"> Water Rescue</li>
+                        <li><input type="checkbox" id="urbanSar" name="skills[]" value="Urban Search and Rescue"> Urban Search and Rescue</li>
+                        <li><input type="checkbox" id="heavyEquipment" name="skills[]" value="Heavy Equipment Operation (for debris removal)"> Heavy Equipment Operation (for debris removal)</li>
+                    </ul>
+                </div>
+
+                <!-- Logistics and Supply Management -->
+                <button class="collapsible" onclick="toggleSkills('logisticsSkills')">Logistics and Supply Management</button>
+                <div id="logisticsSkills" class="content">
+                    <ul>
+                        <li><input type="checkbox" id="logisticsCoord" name="skills[]" value="Logistics Coordination"> Logistics Coordination</li>
+                        <li><input type="checkbox" id="supplyChain" name="skills[]" value="Supply Chain Management"> Supply Chain Management</li>
+                        <li><input type="checkbox" id="inventoryMgmt" name="skills[]" value="Inventory Management"> Inventory Management</li>
+                        <li><input type="checkbox" id="shelterSetup" name="skills[]" value="Shelter Setup"> Shelter Setup</li>
+                        <li><input type="checkbox" id="waterPurification" name="skills[]" value="Water Purification"> Water Purification</li>
+                        <li><input type="checkbox" id="foodDistribution" name="skills[]" value="Food Distribution"> Food Distribution</li>
+                    </ul>
+                </div>
+
+                <!-- Safety and Risk Management -->
+                <button class="collapsible" onclick="toggleSkills('safetySkills')">Safety and Risk Management</button>
+                <div id="safetySkills" class="content">
+                    <ul>
+                        <li><input type="checkbox" id="firefighting" name="skills[]" value="Firefighting"> Firefighting</li>
+                        <li><input type="checkbox" id="hazardousMaterials" name="skills[]" value="Hazardous Materials Handling"> Hazardous Materials Handling</li>
+                        <li><input type="checkbox" id="riskMgmt" name="skills[]" value="Risk Management"> Risk Management</li>
+                    </ul>
+                </div>
+
+                <!-- Educational Information -->
+                <label for="institutionName">Institution Name:</label>
+                <input type="text" id="institutionName" name="institutionName" placeholder="Enter your institution name" required>
+
+                <!-- Course/Field of Study -->
+<label for="course">Course/Field of Study:</label>
+<select id="course" name="course" required>
+    <option value="" disabled selected>Select your course</option>
+    <option value="Engineering">Engineering</option>
+    <option value="Business Administration">Business Administration</option>
+    <option value="Healthcare">Healthcare</option>
+    <option value="Law">Law</option>
+    <option value="Finance">Finance</option>
+</select>
+
+<!-- Collapsible Section for Course Fields (Initially hidden) -->
+<div id="courseFieldsContent" class="content" style="display: none;">
+    <h3>Select Your Course Fields:</h3>
+    
+    <!-- Checkboxes for Courses -->
+    <label><input type="checkbox" name="courseFields[]" value="Engineering"> Engineering</label><br>
+    <label><input type="checkbox" name="courseFields[]" value="Business Administration"> Business Administration</label><br>
+    <label><input type="checkbox" name="courseFields[]" value="Healthcare"> Healthcare</label><br>
+    <label><input type="checkbox" name="courseFields[]" value="Law"> Law</label><br>
+    <label><input type="checkbox" name="courseFields[]" value="Finance"> Finance</label><br>
+</div>
+
+                <label for="academicYear">Academic Year/Level:</label>
+                <input type="text" id="academicYear" name="academicYear" placeholder="Enter your academic year/level" required>
+
+               
+                <!-- Aadhar Card / Government ID -->
+                <label for="aadharCard">Aadhar Card / Government-issued ID:</label>
+                <input type="file" id="aadharCard" name="aadharCard" accept="application/pdf,image/*" required>
+
+                <!-- Passport-sized Photograph -->
+                <label for="photo">Passport-sized Photograph:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" required>
+
+               
+
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+
+                <label for="certified">
+                    <input type="checkbox" id="certified" name="certified">
+                    NSS/NCC Certified
+                </label>
+
+                <!-- File input for certification -->
+                <label for="certFile">Upload NSS/NCC Certification (PDF only):</label>
+                <input type="file" id="certFile" name="certFile" accept="application/pdf" required>
+
+                <input type="submit" value="Join as Volunteer">
+            </form>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-container">
+            <h2>Feedback on Volunteer Management</h2>
+            <form action="submit_feedback.php" method="post">
+                <label for="feedbackName">Your Name:</label>
+                <input type="text" id="feedbackName" name="feedbackName" placeholder="Enter your name">
+
+                <label for="feedbackEmail">Your Email:</label>
+                <input type="email" id="feedbackEmail" name="feedbackEmail" placeholder="Enter your email" required>
+
+                <label for="feedbackMessage">Your Feedback:</label>
+                <textarea id="feedbackMessage" name="feedbackMessage" rows="4" placeholder="Share your feedback or suggestions" required></textarea>
+
+                <input type="submit" value="Submit Feedback">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Collapsible functionality
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

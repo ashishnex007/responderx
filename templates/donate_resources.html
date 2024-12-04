@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Resources</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #003366;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            color: #003366;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+            background-color: #f8d7da;
+            padding: 15px;
+            border-radius: 8px;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .flash-message {
+            margin: 0;
+        }
+
+        /* Style for the map container */
+        #map {
+            height: 300px;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding shadow for visual appeal */
+            max-width: 100%; /* Ensures map doesn't exceed parent container's width */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            #map {
+                height: 250px; /* Adjust map height on smaller screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Donate Resources</h2>
+        <nav>
+            <a href="donate.html">back</a>
+           
+        </nav>
+
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            <p class="flash-message">Thank you for your generosity! Please fill out the form below to donate your resources.</p>
+        </div>
+
+        <!-- Donation Form -->
+        <form action="/donate-resource" method="POST">
+
+            <!-- Personal Information -->
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+
+            <!-- Resource Information -->
+            <div class="form-group">
+                <label for="resource_type">Type of Resource</label>
+                <select id="resource_type" name="resource_type" required>
+                    <option value="food">Food</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="medical_supplies">Medical Supplies</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" placeholder="Enter quantity of resources" required>
+            </div>
+
+            <div class="form-group">
+                <label for="condition">Condition of Resource</label>
+                <select id="condition" name="condition" required>
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                </select>
+            </div>
+
+            <!-- Collection/Delivery Details -->
+            <div class="form-group">
+                <label for="donation_timeframe">When are the resources available for donation?</label>
+                <input type="text" id="donation_timeframe" name="donation_timeframe" placeholder="Enter date/time for donation" required>
+            </div>
+
+            <!-- Map for location -->
+            <div class="form-group">
+                <label for="donation_location">Choose Donation Location</label>
+                <div id="map"></div>
+            </div>
+
+            <!-- Legal/Compliance Information -->
+            <div class="form-group">
+                <input type="checkbox" id="compliance" name="compliance" required>
+                <label for="compliance">I agree that the resources donated meet the donation guidelines</label>
+            </div>
+
+            <button type="submit">Donate Resources</button>
+        </form>
+    </div>
+
+    <!-- Leaflet JS for map functionality -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let marker;
+
+        function initMap() {
+            map = L.map('map').setView([51.505, -0.09], 13); // Default location is London
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function (event) {
+                placeMarker(event.latlng);
+                document.getElementById('incidentLocation').value = `Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}`;
+            });
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                marker.setLatLng(location);
+            } else {
+                marker = L.marker(location).addTo(map);
+            }
+            map.setView(location);
+        }
+
+        // Initialize the map
+        initMap();
+    </script>
+</body>
+
+</html>
