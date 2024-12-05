@@ -111,6 +111,7 @@
             <div id="map"></div>
 
             <label for="incidentDate">Date and Time:</label>
+            <button type="button" onclick="setCurrentDateTime()">Use Current Date and Time</button>
             <input type="datetime-local" id="incidentDate" name="incidentDate">
 
             <label for="severity">Severity Level:</label>
@@ -122,7 +123,7 @@
 
             <label for="media">Upload Media (Images, Videos):</label>
             <div id="mediaOptions">
-                <input type="file" id="media" name="media" accept="image/*,video/*">
+                <input type="file" id="media" name="media" accept="image/*,video/*" onchange="previewMedia()">
             </div>
 
             <div class="media-display" id="mediaDisplay"></div>
@@ -172,6 +173,12 @@
             } else {
                 alert("Geolocation is not supported by this browser.");
             }
+        }
+
+        function setCurrentDateTime() {
+            const now = new Date();
+            const datetimeLocal = now.toISOString().slice(0, 16);
+            document.getElementById('incidentDate').value = datetimeLocal;
         }
 
         function updateRequirements() {
@@ -241,6 +248,27 @@
             requirementsDiv.innerHTML = html;
         }
 
+        function previewMedia() {
+            const mediaInput = document.getElementById('media');
+            const mediaDisplay = document.getElementById('mediaDisplay');
+            mediaDisplay.innerHTML = ''; // Clear previous media preview
+
+            const file = mediaInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mediaType = file.type.startsWith('image') ? 'image' : 'video';
+                    const mediaElement = document.createElement(mediaType);
+                    mediaElement.src = e.target.result;
+                    if (mediaType === 'video') {
+                        mediaElement.controls = true;
+                    }
+                    mediaDisplay.appendChild(mediaElement);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         document.getElementById('incidentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -253,6 +281,7 @@
             if (response.ok) {
                 alert('Report submitted successfully');
                 e.target.reset();
+                document.getElementById('mediaDisplay').innerHTML = ''; // Clear media preview after submission
             } else {
                 alert('Error: ' + await response.text());
             }

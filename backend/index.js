@@ -32,6 +32,18 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
 });
 
+app.get('/submit_report', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/incident_reporting.html'));
+});
+
+app.get('/reports', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/view_reports.html'));
+});
+
+app.get('/view_report', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/report_detail.html'));
+});
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });

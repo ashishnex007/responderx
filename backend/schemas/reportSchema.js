@@ -10,7 +10,8 @@ const reportSchema = new mongoose.Schema({
     required: true,
   },
   media: {
-    type: String,
+    data: Buffer,
+    contentType: String
   },
   type:{
     type: String,
@@ -26,7 +27,16 @@ const reportSchema = new mongoose.Schema({
     type: String
   }
 }, {
-    timestamps: true,
+  // This toJSON method helps in converting Binary to base64 when sending
+  toJSON: { 
+    transform: (doc, ret) => {
+      if (ret.media && ret.media.data) {
+        ret.media.data = ret.media.data.toString('base64');
+      }
+      return ret;
+    } 
+  },
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Report', reportSchema);

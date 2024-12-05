@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Detail</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        .report-detail {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .report-detail h2 {
+            margin-bottom: 10px;
+        }
+        .report-detail p {
+            margin-bottom: 10px;
+        }
+        .report-detail .map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }   
+        .media-display img, .media-display video {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Report Detail</h1>
+        <div id="reportDetail"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        async function fetchReportDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const reportId = urlParams.get('id');
+            
+            try {
+                const response = await fetch(`/api/reports/${reportId}`);
+                const report = await response.json();
+                const reportDetail = document.getElementById('reportDetail');
+
+                // Clear any existing content
+                reportDetail.innerHTML = '';
+
+                // Add report details
+                const details = [
+                    { label: 'Description', value: report.description },
+                    { label: 'Type of Disaster', value: report.type },
+                    { label: 'Date and Time', value: new Date(report.createdAt).toLocaleString() },
+                    { label: 'Severity', value: report.severity },
+                    { label: 'Necessities', value: report.necessities },
+                    { label: 'Feedback', value: report.feedback }
+                ];
+
+                details.forEach(detail => {
+                    const p = document.createElement('p');
+                    p.textContent = `${detail.label}: ${detail.value || 'N/A'}`;
+                    reportDetail.appendChild(p);
+                });
+
+                // Add map
+                const mapDiv = document.createElement('div');
+                mapDiv.className = 'map';
+                reportDetail.appendChild(mapDiv);
+
+                const map = L.map(mapDiv).setView([0, 0], 13);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Parse location
+                const [lat, lng] = report.location.replace('Latitude: ', '').replace('Longitude: ', '').split(', ').map(Number);
+                const marker = L.marker([lat, lng]).addTo(map);
+                map.setView([lat, lng], 15);
+
+                // Handle media display
+                if (report.media) {
+                    const mediaDisplay = document.createElement('div');
+                    mediaDisplay.className = 'media-display';
+
+                    // Convert Buffer/binary data to base64
+                    const base64Media = report.media.data.toString('base64');
+                    
+                    // Determine media type (you may need to adjust this based on your exact storage method)
+                    const mediaType = report.media.contentType || 'image/jpeg';
+                    const mediaSrc = `data:${mediaType};base64,${base64Media}`;
+
+                    const img = document.createElement('img');
+                    img.src = mediaSrc;
+                    img.alt = 'Report Image';
+                    mediaDisplay.appendChild(img);
+
+                    reportDetail.appendChild(mediaDisplay);
+                }
+
+                // Fix map sizing issues
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 100);
+
+            } catch (error) {
+                console.error('Error fetching report details:', error);
+                const errorMsg = document.createElement('p');
+                errorMsg.textContent = `Error loading report: ${error.message}`;
+                errorMsg.style.color = 'red';
+                reportDetail.appendChild(errorMsg);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchReportDetail);
+    </script>
+</body>
+</html>

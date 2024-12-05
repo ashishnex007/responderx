@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Reports</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        .report {
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .report h3 {
+            margin-bottom: 10px;
+        }
+        .report p {
+            margin-bottom: 10px;
+        }
+        .report .map {
+            height: 200px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .report button {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .report button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reports</h1>
+        <div id="reportsList"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        async function fetchReports() {
+            const response = await fetch('/api/reports');
+            const reports = await response.json();
+            const reportsList = document.getElementById('reportsList');
+
+            reports.forEach(report => {
+                const reportDiv = document.createElement('div');
+                reportDiv.className = 'report';
+
+                const description = document.createElement('p');
+                description.textContent = `Description: ${report.description}`;
+                reportDiv.appendChild(description);
+
+                const type = document.createElement('p');
+                type.textContent = `Type of Disaster: ${report.type}`;
+                reportDiv.appendChild(type);
+
+                const dateTime = document.createElement('p');
+                dateTime.textContent = `Date and Time: ${new Date(report.createdAt).toLocaleString()}`;
+                reportDiv.appendChild(dateTime);
+
+                const mapDiv = document.createElement('div');
+                mapDiv.className = 'map';
+                reportDiv.appendChild(mapDiv);
+
+                const map = L.map(mapDiv).setView([0, 0], 13);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                const [lat, lng] = report.location.replace('Latitude: ', '').replace('Longitude: ', '').split(', ').map(Number);
+                const marker = L.marker([lat, lng]).addTo(map);
+                map.setView([lat, lng], 15); // Zoom in to the location
+
+                const readMoreButton = document.createElement('button');
+                readMoreButton.textContent = 'Read More';
+                readMoreButton.onclick = () => {
+                    window.location.href = `/view_report?id=${report._id}`;
+                };
+                reportDiv.appendChild(readMoreButton);
+
+                reportsList.appendChild(reportDiv);
+
+                // Fix map sizing issues
+                map.invalidateSize();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchReports);
+    </script>
+</body>     
+</html>
