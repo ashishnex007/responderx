@@ -5,6 +5,7 @@ const connectDB = require('./config/connectDB');
 
 // * controllers
 const userController = require('./controllers/userController');
+const reportController = require('./controllers/reportController');
 
 const app = express();
 const port = 3000;
@@ -37,6 +38,7 @@ app.get('/admin', (req, res) => {
 
 // Link userController
 app.use('/api/users', userController);
+app.use('/api/reports', reportController);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

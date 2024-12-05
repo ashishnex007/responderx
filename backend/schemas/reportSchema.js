@@ -1,4 +1,4 @@
-const monogoose = require('monogoose');
+const mongoose = require('mongoose');
 
 // report schema
 const reportSchema = new mongoose.Schema({
@@ -28,3 +28,5 @@ const reportSchema = new mongoose.Schema({
 }, {
     timestamps: true,
 });
+
+module.exports = mongoose.model('Report', reportSchema);
