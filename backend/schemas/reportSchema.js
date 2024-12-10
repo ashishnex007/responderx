@@ -22,6 +22,10 @@ const reportSchema = new mongoose.Schema({
   necessities: {
     type: String,
   },
+  status: {
+    type: String,
+    default: 'pending',
+  },
   // * this is when the volunteers report to the incident
   feedback :{
     type: String

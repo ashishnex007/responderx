@@ -7,10 +7,18 @@ const User = require("../schemas/UserSchema");
 
 // Signup controller
 router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, phoneNumber, name, skills, dateOfBirth } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({ 
+      username, 
+      email, 
+      password: hashedPassword, 
+      phoneNumber, 
+      name, 
+      skills, 
+      dateOfBirth 
+    });
     await newUser.save();
     res.status(201).send('User created');
   } catch (error) {

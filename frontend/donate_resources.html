@@ -85,7 +85,7 @@
         /* Style for the map container */
         #map {
             height: 300px;
-            width: 400px;
+            width: 100%;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding shadow for visual appeal */
             max-width: 100%; /* Ensures map doesn't exceed parent container's width */
@@ -110,7 +110,6 @@
         <h2>Donate Resources</h2>
         <nav>
             <a href="donate.html">back</a>
-           
         </nav>
 
         <!-- Flash Messages -->
@@ -168,10 +167,11 @@
             </div>
 
             <!-- Map for location -->
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="donation_location">Choose Donation Location</label>
                 <div id="map"></div>
-            </div>
+                <input type="hidden" id="incidentLocation" name="incidentLocation">
+            </div> -->
 
             <!-- Legal/Compliance Information -->
             <div class="form-group">
@@ -200,6 +200,11 @@
                 placeMarker(event.latlng);
                 document.getElementById('incidentLocation').value = `Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}`;
             });
+
+            // Fix map sizing issues
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
         }
 
         function placeMarker(location) {
@@ -212,7 +217,7 @@
         }
 
         // Initialize the map
-        initMap();
+        document.addEventListener('DOMContentLoaded', initMap);
     </script>
 </body>
 

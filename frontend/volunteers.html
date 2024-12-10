@@ -143,7 +143,6 @@
     </nav>
 
     <div class="container">
-        <h1>Volunteer Management</h1>
 
         <!-- Join as a Volunteer Section -->
         <div class="form-container">
@@ -157,6 +156,15 @@
 
                 <label for="volunteerPhone">Phone Number:</label>
                 <input type="tel" id="volunteerPhone" name="volunteerPhone" placeholder="Enter your phone number" required>
+
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
 
                 <label for="volunteerSkills">Skills:</label>
 
@@ -221,32 +229,31 @@
                 <input type="text" id="institutionName" name="institutionName" placeholder="Enter your institution name" required>
 
                 <!-- Course/Field of Study -->
-<label for="course">Course/Field of Study:</label>
-<select id="course" name="course" required>
-    <option value="" disabled selected>Select your course</option>
-    <option value="Engineering">Engineering</option>
-    <option value="Business Administration">Business Administration</option>
-    <option value="Healthcare">Healthcare</option>
-    <option value="Law">Law</option>
-    <option value="Finance">Finance</option>
-</select>
+                <label for="course">Course/Field of Study:</label>
+                <select id="course" name="course" required>
+                    <option value="" disabled selected>Select your course</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Business Administration">Business Administration</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Law">Law</option>
+                    <option value="Finance">Finance</option>
+                </select>
 
-<!-- Collapsible Section for Course Fields (Initially hidden) -->
-<div id="courseFieldsContent" class="content" style="display: none;">
-    <h3>Select Your Course Fields:</h3>
-    
-    <!-- Checkboxes for Courses -->
-    <label><input type="checkbox" name="courseFields[]" value="Engineering"> Engineering</label><br>
-    <label><input type="checkbox" name="courseFields[]" value="Business Administration"> Business Administration</label><br>
-    <label><input type="checkbox" name="courseFields[]" value="Healthcare"> Healthcare</label><br>
-    <label><input type="checkbox" name="courseFields[]" value="Law"> Law</label><br>
-    <label><input type="checkbox" name="courseFields[]" value="Finance"> Finance</label><br>
-</div>
+                <!-- Collapsible Section for Course Fields (Initially hidden) -->
+                <div id="courseFieldsContent" class="content" style="display: none;">
+                    <h3>Select Your Course Fields:</h3>
+                    
+                    <!-- Checkboxes for Courses -->
+                    <label><input type="checkbox" name="courseFields[]" value="Engineering"> Engineering</label><br>
+                    <label><input type="checkbox" name="courseFields[]" value="Business Administration"> Business Administration</label><br>
+                    <label><input type="checkbox" name="courseFields[]" value="Healthcare"> Healthcare</label><br>
+                    <label><input type="checkbox" name="courseFields[]" value="Law"> Law</label><br>
+                    <label><input type="checkbox" name="courseFields[]" value="Finance"> Finance</label><br>
+                </div>
 
                 <label for="academicYear">Academic Year/Level:</label>
                 <input type="text" id="academicYear" name="academicYear" placeholder="Enter your academic year/level" required>
 
-               
                 <!-- Aadhar Card / Government ID -->
                 <label for="aadharCard">Aadhar Card / Government-issued ID:</label>
                 <input type="file" id="aadharCard" name="aadharCard" accept="application/pdf,image/*" required>
@@ -254,8 +261,6 @@
                 <!-- Passport-sized Photograph -->
                 <label for="photo">Passport-sized Photograph:</label>
                 <input type="file" id="photo" name="photo" accept="image/*" required>
-
-               
 
                 <label for="dob">Date of Birth:</label>
                 <input type="date" id="dob" name="dob" required>
@@ -267,14 +272,14 @@
 
                 <!-- File input for certification -->
                 <label for="certFile">Upload NSS/NCC Certification (PDF only):</label>
-                <input type="file" id="certFile" name="certFile" accept="application/pdf" required>
+                <input type="file" id="certFile" name="certFile" accept="application/pdf">
 
                 <input type="submit" value="Join as Volunteer">
             </form>
         </div>
 
         <!-- Feedback Section -->
-        <div class="feedback-container">
+        <!-- <div class="feedback-container">
             <h2>Feedback on Volunteer Management</h2>
             <form action="submit_feedback.php" method="post">
                 <label for="feedbackName">Your Name:</label>
@@ -288,7 +293,7 @@
 
                 <input type="submit" value="Submit Feedback">
             </form>
-        </div>
+        </div> -->
     </div>
 
     <script>
@@ -305,6 +310,41 @@
                 }
             });
         }
+
+        document.getElementById('volunteerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            // Extract only the fields defined in the schema
+            const user = {
+                username: formData.get('username'),
+                email: formData.get('volunteerEmail'),
+                password: formData.get('password'),
+                phoneNumber: formData.get('volunteerPhone'),
+                name: formData.get('volunteerName'),
+                skills: formData.getAll('skills[]'),
+                dateOfBirth: formData.get('dob')
+            };
+
+            console.log(user);
+
+            const response = await fetch('/api/users/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                alert('Volunteer registered successfully');
+                e.target.reset();
+            } else {
+                alert('Error: ' + await response.text());
+            }
+        });
     </script>
 </body>
 </html>

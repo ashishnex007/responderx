@@ -52,10 +52,38 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });
 
-// Link userController
+app.get('/register_volunteer', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/volunteers.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/contact.html'));
+});
+
+app.get('/chat', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/chatbot.html'));
+});
+
+app.get('/donate', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/donate.html'));
+});
+
+app.get('/donate/money', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/donate_money.html'));
+});
+
+app.get('/donate/resources', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/donate_resources.html'));
+});
+
+app.get('/logout', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/logout.html'));
+});
+
+// Backend routes
 app.use('/api/users', userController);
 app.use('/api/reports', reportController);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`ResponderX listening at http://localhost:${port}`);
 });

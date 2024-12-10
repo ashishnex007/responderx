@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Support ChatBot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes typing {
+            0%, 100% { content: '•' }
+            33% { content: '••' }
+            66% { content: '•••' }
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        .chat-container {
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .message {
+            animation: fadeIn 0.5s ease;
+        }
+        .typing-indicator::after {
+            content: '•';
+            animation: typing 1.4s infinite;
+            display: inline-block;
+        }
+        /* Custom scrollbar */
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-blue-300 flex flex-col h-screen">
+    <div class="flex flex-col h-full">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white p-4 shadow-md flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">ResponderX ChatBot</h1>
+                <p class="text-sm">Mental Health Assistance</p>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Online</span>
+            </div>
+        </header>
+
+        <!-- Chat Container -->
+        <div id="chatContainer" class="chat-container flex-grow p-6 space-y-4 overflow-y-auto">
+            <!-- Initial Bot Message -->
+            <div class="flex items-start mb-4">
+                <div class="bg-white shadow-md p-4 rounded-lg max-w-[80%] message">
+                    <p class="text-gray-800">Hey! How are you feeling? I'm here to support you through these challenging times.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="bg-white p-4 border-t border-gray-200 shadow-lg">
+            <div class="flex items-center space-x-2">
+                <input 
+                    type="text" 
+                    id="userInput" 
+                    placeholder="Type your message here..." 
+                    class="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                >
+                <button 
+                    id="sendButton" 
+                    class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "AIzaSyCF9yH2LjInTKohZb8Ne2TVhUXYGsJUXBg";
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Conversation history to maintain context
+        let conversationHistory = [
+            {
+                role: 'user',
+                parts: [{ text: 'You are a compassionate mental health chatbot specialized in disaster support. Provide empathetic, professional, and supportive responses. Focus on emotional well-being, stress management, and providing hope during challenging times.' }]
+            }
+        ];
+
+        function addMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('flex', 'items-start', 'mb-4', 'message');
+            
+            messageDiv.innerHTML = `
+                <div class="flex-grow ${type === 'bot' ? '' : 'flex justify-end'}">
+                    <div class="
+                        p-4 
+                        rounded-lg 
+                        max-w-[80%] 
+                        ${type === 'bot' 
+                            ? 'bg-white text-gray-800 shadow-md' 
+                            : 'bg-blue-600 text-white'}
+                    ">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('flex', 'items-start', 'mb-4', 'typing-indicator-container');
+            
+            typingDiv.innerHTML = `
+                <div class="flex-grow">
+                    <div class="bg-white p-3 rounded-lg max-w-[80%] typing-indicator text-gray-500">
+                        Typing
+                    </div>
+                </div>
+            `;
+
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return typingDiv;
+        }
+
+        async function sendMessage() {
+            const userMessage = userInput.value.trim();
+            if (!userMessage) return;
+
+            // Add user message to chat
+            addMessage(userMessage, 'user');
+            
+            // Show typing indicator
+            const typingIndicator = showTypingIndicator();
+
+            // Add user message to conversation history
+            conversationHistory.push({
+                role: 'user', 
+                parts: [{ text: userMessage }]
+            });
+
+            // Clear input
+            userInput.value = '';
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: conversationHistory,
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 300
+                        }
+                    })
+                });
+
+                // Remove typing indicator
+                chatContainer.removeChild(typingIndicator);
+
+                const data = await response.json();
+                const botReply = data.candidates[0].content.parts[0].text;
+
+                // Add bot reply to chat and conversation history
+                addMessage(botReply, 'bot');
+                conversationHistory.push({
+                    role: 'model', 
+                    parts: [{ text: botReply }]
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                // Remove typing indicator
+                if (typingIndicator.parentNode) {
+                    chatContainer.removeChild(typingIndicator);
+                }
+                addMessage('I am experiencing some technical difficulties. Please try again later.', 'bot');
+            }
+        }
+
+        // Event Listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
