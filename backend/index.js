@@ -20,6 +20,10 @@ connectDB();
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Serve index.html on the / endpoint
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/landing.html'));
+});
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/login.html'));
 });
