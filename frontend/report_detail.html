@@ -4,40 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            padding: 20px;
-        }
-        .report-detail {
-            background-color: #f4f4f4;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        .report-detail h2 {
-            margin-bottom: 10px;
-        }
-        .report-detail p {
-            margin-bottom: 10px;
-        }
-        .report-detail .map {
-            height: 400px;
-            width: 100%;
-            margin-bottom: 20px;
-        }   
-        .media-display img, .media-display video {
-            max-width: 100%;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Report Detail</h1>
-        <div id="reportDetail"></div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <button class="absolute top-5 left-5 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105" onclick="window.location.href = '/reports'">Back to Reports</button>
+    <div class="container max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Report Detail</h1>
+        <div id="reportDetail" class="space-y-4"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -66,13 +40,14 @@
 
                 details.forEach(detail => {
                     const p = document.createElement('p');
+                    p.className = 'text-gray-700';
                     p.textContent = `${detail.label}: ${detail.value || 'N/A'}`;
                     reportDetail.appendChild(p);
                 });
 
                 // Add map
                 const mapDiv = document.createElement('div');
-                mapDiv.className = 'map';
+                mapDiv.className = 'map h-64 w-full rounded-lg shadow';
                 reportDetail.appendChild(mapDiv);
 
                 const map = L.map(mapDiv).setView([0, 0], 13);
@@ -88,7 +63,7 @@
                 // Handle media display
                 if (report.media) {
                     const mediaDisplay = document.createElement('div');
-                    mediaDisplay.className = 'media-display';
+                    mediaDisplay.className = 'media-display mt-4';
 
                     // Convert Buffer/binary data to base64
                     const base64Media = report.media.data.toString('base64');
@@ -97,10 +72,19 @@
                     const mediaType = report.media.contentType || 'image/jpeg';
                     const mediaSrc = `data:${mediaType};base64,${base64Media}`;
 
-                    const img = document.createElement('img');
-                    img.src = mediaSrc;
-                    img.alt = 'Report Image';
-                    mediaDisplay.appendChild(img);
+                    if (mediaType.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = mediaSrc;
+                        img.alt = 'Report Image';
+                        img.className = 'rounded-lg shadow';
+                        mediaDisplay.appendChild(img);
+                    } else if (mediaType.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = mediaSrc;
+                        video.controls = true;
+                        video.className = 'rounded-lg shadow';
+                        mediaDisplay.appendChild(video);
+                    }
 
                     reportDetail.appendChild(mediaDisplay);
                 }
@@ -113,8 +97,8 @@
             } catch (error) {
                 console.error('Error fetching report details:', error);
                 const errorMsg = document.createElement('p');
-                errorMsg.textContent = `Error loading report: ${error.message}`;
-                errorMsg.style.color = 'red';
+                errorMsg.textContent = `No media file attached`;
+                errorMsg.className = 'text-red-600';
                 reportDetail.appendChild(errorMsg);
             }
         }

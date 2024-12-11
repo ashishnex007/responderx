@@ -4,48 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Reports</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            padding: 20px;
-        }
-        .report {
-            background-color: #f4f4f4;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .report h3 {
-            margin-bottom: 10px;
-        }
-        .report p {
-            margin-bottom: 10px;
-        }
-        .report .map {
-            height: 200px;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        .report button {
-            background-color: #333;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .report button:hover {
-            background-color: #555;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Reports</h1>
-        <div id="reportsList"></div>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/dashboard" class="text-white text-2xl font-bold">ResponderX</a>
+            <div>
+                <a href="contact.html" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Reports</h1>
+        <div id="reportsList" class="space-y-6"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -57,22 +33,25 @@
 
             reports.forEach(report => {
                 const reportDiv = document.createElement('div');
-                reportDiv.className = 'report';
+                reportDiv.className = 'bg-white p-6 rounded-lg shadow-lg';
 
                 const description = document.createElement('p');
+                description.className = 'text-gray-700 mb-2';
                 description.textContent = `Description: ${report.description}`;
                 reportDiv.appendChild(description);
 
                 const type = document.createElement('p');
+                type.className = 'text-gray-700 mb-2';
                 type.textContent = `Type of Disaster: ${report.type}`;
                 reportDiv.appendChild(type);
 
                 const dateTime = document.createElement('p');
+                dateTime.className = 'text-gray-700 mb-2';
                 dateTime.textContent = `Date and Time: ${new Date(report.createdAt).toLocaleString()}`;
                 reportDiv.appendChild(dateTime);
 
                 const mapDiv = document.createElement('div');
-                mapDiv.className = 'map';
+                mapDiv.className = 'map h-64 w-full rounded-lg shadow mb-4';
                 reportDiv.appendChild(mapDiv);
 
                 const map = L.map(mapDiv).setView([0, 0], 13);
@@ -85,6 +64,7 @@
                 map.setView([lat, lng], 15); // Zoom in to the location
 
                 const readMoreButton = document.createElement('button');
+                readMoreButton.className = 'bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105';
                 readMoreButton.textContent = 'Read More';
                 readMoreButton.onclick = () => {
                     window.location.href = `/view_report?id=${report._id}`;
@@ -100,5 +80,5 @@
 
         document.addEventListener('DOMContentLoaded', fetchReports);
     </script>
-</body>     
+</body>
 </html>

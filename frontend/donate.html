@@ -1,113 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Donation Page</title>
-	<style>
-		body {
-			background-color: #FFFFFF; /* Set the background color to white */
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 0;
-		}
-		
-		.container {
-			display: flex; /* Use flexbox to align the cards horizontally */
-			justify-content: space-between; /* Space out the cards */
-			max-width: 900px; /* Container width */
-			margin: 50px auto; /* Center the container */
-			padding: 20px;
-			background-color: #FFFFFF; /* Set the section background color to white */
-			border-radius: 10px;
-			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
-			gap: 30px; /* Added gap between the cards */
-		}
-
-		.card {
-			background-color: #f9f9f9; /* Light grey for cards to stand out */
-			padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			text-align: center;
-			width: 48%; /* Makes sure both cards fit horizontally */
-		}
-		
-		.card h2 {
-			font-size: 24px;
-			color: #333;
-		}
-
-		.card p {
-			font-size: 16px;
-			color: #555;
-		}
-		
-		.button {
-			background-color: #007BFF; /* Button background color */
-			color: #FFFFFF; /* Button text color */
-			padding: 12px 24px;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-			font-size: 16px;
-			transition: background-color 0.3s;
-		}
-		
-		.button:hover {
-			background-color: #0056b3; /* Darker button color on hover */
-		}
-
-		/* For mobile responsiveness */
-		@media (max-width: 768px) {
-			.container {
-				flex-direction: column; /* Stack the cards vertically on smaller screens */
-				padding: 15px; /* Slightly reduce padding for smaller screens */
-			}
-			.card {
-				width: 100%; /* Make cards take full width when stacked vertically */
-				margin-bottom: 20px; /* Add space between stacked cards */
-			}
-		}
-
-		nav {
-			text-align: center; /* Center the navigation link */
-			margin-bottom: 20px;
-		}
-
-		nav a {
-			font-size: 16px;
-			color: #007BFF;
-			text-decoration: none;
-			padding: 10px 20px;
-			border-radius: 5px;
-			border: 1px solid #007BFF;
-		}
-
-		nav a:hover {
-			background-color: #007BFF;
-			color: #FFFFFF;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-	<div class="container">
-        <nav>
-            <a href="/dashboard">Back</a>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
+        <nav class="mb-6 text-center">
+            <a href="/dashboard" class="text-blue-600 hover:underline">Back</a>
         </nav>
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Donate</h1>
         
-		<div class="card">
-			<h2>Donate Money</h2>
-			<p>Help us support those affected by disasters</p>
-			<button class="button" onclick="window.location.href='/donate/money'">Donate Now</button>
-		</div>
-        
-		<div class="card">
-			<h2>Donate Resources</h2>
-			<p>Contribute goods and services to support disaster relief efforts</p>
-			<button class="button" onclick="window.location.href='/donate/resources'">Donate Now</button>
-		</div>
-	</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Donate Money</h2>
+                <p class="text-gray-600 mb-6">Help us support those affected by disasters</p>
+                <button class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105" onclick="window.location.href='/donate/money'">Donate Now</button>
+            </div>
+            
+            <div class="card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Donate Resources</h2>
+                <p class="text-gray-600 mb-6">Contribute goods and services to support disaster relief efforts</p>
+                <button class="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-transform transform hover:scale-105" onclick="window.location.href='/donate/resources'">Donate Now</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

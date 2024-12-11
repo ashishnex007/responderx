@@ -1,135 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Crowdsourced Disaster Response Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #fff; /* White background */
-            font-family: Arial, sans-serif;
-        }
-        
-        /* Navbar Style */
-        .navbar {
-            display: flex; /* Use Flexbox to align items */
-            justify-content: center; /* Center the items horizontally */
-            background-color: #333; /* Dark gray background for navbar */
-            padding: 10px;
-        }
-
-        .navbar a {
-            color: #fff; /* White text color */
-            text-decoration: none;
-            margin: 0 20px; /* Space out the links */
-            font-size: 25px;
-        }
-        
-        .container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #FFD700; /* Light gray background for container */
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Styling for the Title (inside container) */
-        .title {
-            grid-column: 1 / 5; /* Make the title span across all columns */
-            text-align: center; /* Center the title text */
-            color: #333; /* Dark text color */
-            font-size: 45px; /* Larger font for the title */
-            line-height: 1.1; /* Adjust line height for title */
-            margin-bottom: 5px; /* Space below the title */
-        }
-        
-        .card {
-            background-color: #fff; /* White background for cards */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
-            text-align: center; /* Ensure text is centered */
-            min-height: 250px; /* Set a minimum height for each card */
-        }
-
-        .card h2 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 15px; /* Space between heading and button */
-        }
-        
-        .card p {
-            color: #555;
-            font-size: 16px;
-            margin-bottom: 20px; /* Space between text and button */
-        }
-        
-        .button {
-            background-color: #007bff; /* Blue button color */
-            color: #fff; /* White button text color */
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        
-        .button:hover {
-            background-color: #0056b3; /* Darker blue button color on hover */
+        .card:hover {
+            transform: translateY(-10px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body>
-    <div class="navbar">
-        <a href="logout.html">Logout</a>
-    </div>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal">
+    <!-- Navbar -->
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-2xl font-bold">ResponderX Admin</div>
+            <div>
+                <a href="/logout" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">Logout</a>
+            </div>
+        </div>
+    </nav>
 
-    <div class="container">
-        <!-- Title inside the container -->
-        <h1 class="title">Dashboard</h1>
+    <!-- Container -->
+    <div class="container mx-auto mt-10">
+        <!-- Title -->
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Admin Dashboard</h1>
 
-        <div class="card">
-            <h2>Number of Reports</h2>
-            <p>Reports</p>
+        <div class="grid grid-cols-3 gap-6 mb-8 px-12">
+            <!-- Volunteers Stat -->
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users text-blue-500">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Active Volunteers</h3>
+                        <p class="text-3xl font-bold text-gray-900">23</p>
+                        <p class="text-md text-green-600">+12 this week</p>
+                        <div class="pt-4">
+                            <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all volunteers</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Incidents Stat -->
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle text-red-500">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                            <path d="M12 9v4"/>
+                            <path d="M12 17h.01"/>
+                        </svg>
+                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Number of Reports</h3>
+                        <p class="text-3xl font-bold text-gray-900">14</p>
+                        <p class="text-md text-red-600">+3 from yesterday</p>
+                        <div class="pt-4">
+                            <button class="bg-red-50 text-red-600 px-4 py-2 rounded-xl hover:bg-red-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all Reports</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donations Stat -->
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <svg fill="#000000" width="32" height="32" viewBox="-96 0 512 512" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M308 96c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v44.748c0 6.627 5.373 12 12 12h85.28c27.308 0 48.261 9.958 60.97 27.252H12c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h158.757c-6.217 36.086-32.961 58.632-74.757 58.632H12c-6.627 0-12 5.373-12 12v53.012c0 3.349 1.4 6.546 3.861 8.818l165.052 152.356a12.001 12.001 0 0 0 8.139 3.182h82.562c10.924 0 16.166-13.408 8.139-20.818L116.871 319.906c76.499-2.34 131.144-53.395 138.318-127.906H308c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12h-58.69c-3.486-11.541-8.28-22.246-14.252-32H308z"></path></g></svg>
+                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Resources Donated</h3>
+                        <p class="text-3xl font-bold text-gray-900">₹4,600</p>
+                        <p class="text-md text-green-600">+₹1,200 this month</p>
+                        <div class="pt-4">
+                            <button class="bg-green-50 text-green-600 px-4 py-2 rounded-xl hover:bg-green-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all Resources</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card">
-            <h2>Live Reports</h2>
-            <p>Live Reports</p>
-        </div>
-        <div class="card">
-            <h2>Ration Management</h2>
-            <p>Godowns</p>
-        </div>
-        <div class="card">
-            <h2>Number of Volunteers</h2>
-            <p>Volunteers</p>
-        </div>
-        <div class="card">
-            <h2>Manage Resources</h2>
-            <p>Track and manage resources</p>
-            <button class="button" onclick="window.location.href='manage_resources.html'">Manage</button>
-        </div>
-        <div class="card">
-            <h2>Manage Volunteers</h2>
-            <p>Connect and manage volunteers</p>
-            <button class="button" onclick="window.location.href='manage_volunteers.html'">Manage</button>
-        </div>
-        <div class="card">
-            <h2>Manage Reports</h2>
-            <p>Review and update reports</p>
-            <button class="button" onclick="window.location.href='manage_reports.html'">Manage</button>
-        </div>
-        <div class="card">
-            <h2>Settings</h2>
-            <p>Update platform settings</p>
-            <button class="button" onclick="window.location.href='settings.html'">Settings</button>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-12">
+
+            <!-- Ration Management -->
+            <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Ration Management</h2>
+                <p class="text-lg text-gray-600 mb-6">Nearby Godowns</p>
+                <button class="bg-purple-50 text-purple-600 px-4 py-2 rounded-xl hover:bg-purple-100 transition-colors" onclick="window.location.href='/donate'">View Godowns</button>
+            </div>
+
+            <!-- Settings -->
+            <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Settings</h2>
+                <p class="text-lg text-gray-600 mb-6">Update platform settings</p>
+                <button class="bg-yellow-600 text-white px-4 py-2 rounded-xl hover:bg-yellow-700 transition-colors" onclick="window.location.href='settings.html'">Settings</button>
+            </div>
         </div>
     </div>
 </body>

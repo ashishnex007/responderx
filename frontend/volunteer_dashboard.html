@@ -21,6 +21,7 @@
             <div>
                 <a href="about.html" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">About</a>
                 <a href="/contact" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">Contact</a>
+                <a href="/logout" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">Logout</a>
             </div>
         </div>
     </nav>
@@ -28,7 +29,7 @@
     <!-- Container -->
     <div class="container mx-auto mt-10">
         <!-- Title -->
-        <h1 class="text-5xl font-bold text-center text-gray-800 mb-10">ResponderX - A Crowdsourced Disaster Response Platform</h1>
+        <h1 class="text-5xl font-bold text-center text-gray-800 mb-10">ResponderX - Volunteer Dashboard</h1>
 
         <div class="grid grid-cols-3 gap-6 mb-8 px-12">
             <!-- Volunteers Stat -->
@@ -41,9 +42,12 @@
                             <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                         </svg>
-                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Volunteers</h3>
+                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Active Volunteers</h3>
                         <p class="text-3xl font-bold text-gray-900">23</p>
                         <p class="text-md text-green-600">+12 this week</p>
+                        <div class="pt-4">
+                            <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all volunteers</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,6 +64,9 @@
                         <h3 class="text-xl font-semibold text-gray-700 mt-2">Number of Reports</h3>
                         <p class="text-3xl font-bold text-gray-900">14</p>
                         <p class="text-md text-red-600">+3 from yesterday</p>
+                        <div class="pt-4">
+                            <button class="bg-red-50 text-red-600 px-4 py-2 rounded-xl hover:bg-red-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all Reports</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,6 +79,9 @@
                         <h3 class="text-xl font-semibold text-gray-700 mt-2">Resources Donated</h3>
                         <p class="text-3xl font-bold text-gray-900">₹4,600</p>
                         <p class="text-md text-green-600">+₹1,200 this month</p>
+                        <div class="pt-4">
+                            <button class="bg-green-50 text-green-600 px-4 py-2 rounded-xl hover:bg-green-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all Resources</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,18 +89,12 @@
 
         <!-- Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-12">
-            <!-- Incident Reporting -->
-            <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Incident Reporting</h2>
-                <p class="text-lg text-gray-600 mb-6">Receive instant alerts & updates.</p>
-                <button class="bg-red-50 text-red-600 px-4 py-2 rounded-xl hover:bg-red-100 transition-colors" onclick="window.location.href='/submit_report'">Report Incident</button>
-            </div>
 
-            <!-- Resources Management -->
+            <!-- Ration Management -->
             <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Resources Management</h2>
-                <p class="text-lg text-gray-600 mb-6">Manage and track resources effectively.</p>
-                <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors" onclick="window.location.href='resources.html'">Resources</button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Ration Management</h2>
+                <p class="text-lg text-gray-600 mb-6">Nearby Godowns</p>
+                <button class="bg-purple-50 text-purple-600 px-4 py-2 rounded-xl hover:bg-purple-100 transition-colors" onclick="window.location.href='/donate'">View Godowns</button>
             </div>
 
             <!-- Donate -->
@@ -100,20 +104,12 @@
                 <button class="bg-green-50 text-green-600 px-4 py-2 rounded-xl hover:bg-green-100 transition-colors" onclick="window.location.href='/donate'">Donate</button>
             </div>
 
-            <!-- Volunteer Management -->
-            <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Volunteer Management</h2>
-                <p class="text-lg text-gray-600 mb-6">Join as a volunteer.</p>
-                <button class="bg-purple-50 text-purple-600 px-4 py-2 rounded-xl hover:bg-purple-100 transition-colors" onclick="window.location.href='/register_volunteer'">Join</button>
-            </div>
-
             <!-- Mental Health Support -->
             <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Mental Health Support</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Extra Volunteers</h2>
                 <p class="text-lg text-gray-600 mb-6">Connect with counselors and therapists.</p>
                 <button class="bg-red-50 text-red-600 px-4 py-2 rounded-xl hover:bg-red-100 transition-colors" onclick="window.location.href='/chat'">Support</button>
             </div>
-
         </div>
     </div>
 </body>

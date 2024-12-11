@@ -36,6 +36,10 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
 });
 
+app.get('/volunteer_dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/volunteer_dashboard.html'));
+});
+
 app.get('/submit_report', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/incident_reporting.html'));
 });
@@ -62,6 +66,10 @@ app.get('/contact', (req, res) => {
 
 app.get('/chat', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/chatbot.html'));
+});
+
+app.get('/resources', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/resources.html'));
 });
 
 app.get('/donate', (req, res) => {

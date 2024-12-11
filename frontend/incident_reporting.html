@@ -4,133 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incident Reporting and Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        nav {
-            background-color: #333;
-            padding: 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 18px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            padding: 20px;
-        }
-        form {
-            background-color: #f4f4f4;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="datetime-local"], select, input[type="email"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        input[type="submit"] {
-            background-color: #333;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #555;
-        }
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        #videoElement {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
-        #mediaOptions {
-            margin-bottom: 15px;
-        }
-        .media-display {
-            margin-top: 20px;
-        }
-        .media-display img, .media-display video {
-            max-width: 100%;
-            margin-bottom: 10px;
-        }
-        .checkbox-group {
-            margin-top: 20px;
-        }
-    </style>
 </head>
-<body>
-    <nav>
-        <a href="dashboard.html">Home</a>
-        <a href="incident_reporting.html">Incident Reporting</a>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-2xl font-bold">ResponderX</div>
+            <div>
+                <a href="/dashboard" class="text-white px-4 py-2 hover:bg-blue-700 rounded">Home</a>
+                <a href="/reports" class="text-white px-4 py-2 hover:bg-blue-700 rounded">View Reports</a>
+            </div>
+        </div>
     </nav>
 
-    <div class="container">
-        <h1>Incident Reporting and Management</h1>
-        <form id="incidentForm" enctype="multipart/form-data">
-
-            <label for="description">Description of Incident:</label>
-            <textarea id="description" name="description" rows="4"></textarea>
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Incident Reporting and Management</h1>
+        <form id="incidentForm" class="bg-white p-8 rounded-lg shadow-lg space-y-6" enctype="multipart/form-data">
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description of Incident:</label>
+                <textarea id="description" name="description" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+            </div>
            
-            <label for="type">Type of Disaster:</label>
-            <select id="type" name="type" onchange="updateRequirements()">
-                <option value="">Select Type</option>
-                <option value="earthquake">Earthquake</option>
-                <option value="flood">Flood</option>
-                <option value="hurricane">Hurricane</option>
-                <option value="fire">Fire</option>
-                <option value="landslide">Landslide</option>
-                <option value="other">Other</option>
-            </select>
+            <div>
+                <label for="type" class="block text-sm font-medium text-gray-700">Type of Disaster:</label>
+                <select id="type" name="type" onchange="updateRequirements()" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">Select Type</option>
+                    <option value="earthquake">Earthquake</option>
+                    <option value="flood">Flood</option>
+                    <option value="hurricane">Hurricane</option>
+                    <option value="fire">Fire</option>
+                    <option value="landslide">Landslide</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
 
             <div id="requirements" class="checkbox-group"></div>
 
-            <label for="location">Location:</label>
-            <button type="button" onclick="getLocation()">Use Current Location</button>
-            <input type="text" id="location" name="location" readonly>
-
-            <div id="map"></div>
-
-            <label for="incidentDate">Date and Time:</label>
-            <button type="button" onclick="setCurrentDateTime()">Use Current Date and Time</button>
-            <input type="datetime-local" id="incidentDate" name="incidentDate">
-
-            <label for="severity">Severity Level:</label>
-            <select id="severity" name="severity">
-                <option value="minor">Minor</option>
-                <option value="major">Major</option>
-                <option value="critical">Critical</option>
-            </select>
-
-            <label for="media">Upload Media (Images, Videos):</label>
-            <div id="mediaOptions">
-                <input type="file" id="media" name="media" accept="image/*,video/*" onchange="previewMedia()">
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700">Location:</label>
+                <button type="button" onclick="getLocation()" class="mt-1 mb-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">Use Current Location</button>
+                <input type="text" id="location" name="location" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
-            <div class="media-display" id="mediaDisplay"></div>
+            <div id="map" class="h-64 w-full rounded-lg shadow mb-6"></div>
 
-            <input type="submit" value="Report Incident">
+            <div>
+                <label for="incidentDate" class="block text-sm font-medium text-gray-700">Date and Time:</label>
+                <button type="button" onclick="setCurrentDateTime()" class="mt-1 mb-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">Use Current Date and Time</button>
+                <input type="datetime-local" id="incidentDate" name="incidentDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="severity" class="block text-sm font-medium text-gray-700">Severity Level:</label>
+                <select id="severity" name="severity" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="minor">Minor</option>
+                    <option value="major">Major</option>
+                    <option value="critical">Critical</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="media" class="block text-sm font-medium text-gray-700">Upload Media (Images, Videos):</label>
+                <div id="mediaOptions" class="mt-1 mb-2">
+                    <input type="file" id="media" name="media" accept="image/*,video/*" onchange="previewMedia()" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+                <div class="media-display" id="mediaDisplay"></div>
+            </div>
+
+            <div>
+                <input type="submit" value="Report Incident" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">
+            </div>
         </form>
-
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

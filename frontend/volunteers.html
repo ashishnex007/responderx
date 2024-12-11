@@ -4,296 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Management</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-        }
-        nav { 
-            background-color: #333; 
-            padding: 10px; 
-        }
-        nav a { 
-            color: white; 
-            text-decoration: none; 
-            margin: 0 15px; 
-            font-size: 18px; 
-        }
-        nav a:hover { 
-            text-decoration: underline; 
-        }
-        .container { 
-            padding: 20px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-        }
-        h1 { 
-            margin-bottom: 20px; 
-        }
-        .form-container, .feedback-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        form label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        form input[type="text"], 
-        form input[type="email"], 
-        form input[type="tel"], 
-        form textarea,
-        form input[type="date"],
-        form input[type="file"] { 
-            width: 100%; 
-            padding: 10px; 
-            margin-bottom: 15px; 
-            border-radius: 5px; 
-            border: 1px solid #ccc;
-        }
-        form input[type="checkbox"] {
-            margin-right: 10px;
-        }
-        form input[type="submit"] {
-            background-color: #333;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        form input[type="submit"]:hover {
-            background-color: #555;
-        }
-        .volunteer-card {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .feedback-container h2 {
-            margin-top: 0;
-            font-size: 24px;
-        }
-        .feedback-container input[type="text"], 
-        .feedback-container input[type="email"], 
-        .feedback-container textarea {
-            width: calc(100% - 22px); /* Adjust for padding */
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .feedback-container input[type="submit"] {
-            background-color: #333;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .feedback-container input[type="submit"]:hover {
-            background-color: #555;
-        }
-
-        /* Collapsible Section Styles */
-        .collapsible {
-            background-color: #333;
-            color: white;
-            cursor: pointer;
-            padding: 10px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            font-size: 18px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .collapsible.active, .collapsible:hover {
-            background-color: #555;
-        }
-        .content {
-            padding: 0 18px;
-            display: none;
-            overflow: hidden;
-            background-color: #f1f1f1;
-        }
-        .content ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .content li {
-            padding: 8px 0;
-        }
-        .content input[type="checkbox"] {
-            margin-right: 10px;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav>
-        <a href="dashboard.html">Home</a>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/dashboard" class="text-white text-2xl font-bold">ResponderX</a>
+        </div>
     </nav>
 
-    <div class="container">
-
+    <div class="container mx-auto mt-10">
         <!-- Join as a Volunteer Section -->
-        <div class="form-container">
-            <h2>Join as a Volunteer</h2>
-            <form id="volunteerForm" method="post" enctype="multipart/form-data">
-                <label for="volunteerName">Full Name:</label>
-                <input type="text" id="volunteerName" name="volunteerName" placeholder="Enter your full name" required>
+        <div class="bg-white p-8 rounded-lg shadow-lg mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Join as a Volunteer</h2>
+            <form id="volunteerForm" method="post" enctype="multipart/form-data" class="space-y-6">
+                <div>
+                    <label for="volunteerName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="volunteerName" name="volunteerName" placeholder="Enter your full name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <label for="volunteerEmail">Email:</label>
-                <input type="email" id="volunteerEmail" name="volunteerEmail" placeholder="Enter your email address" required>
+                <div>
+                    <label for="volunteerEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="volunteerEmail" name="volunteerEmail" placeholder="Enter your email address" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <label for="volunteerPhone">Phone Number:</label>
-                <input type="tel" id="volunteerPhone" name="volunteerPhone" placeholder="Enter your phone number" required>
+                <div>
+                    <label for="volunteerPhone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input type="tel" id="volunteerPhone" name="volunteerPhone" placeholder="Enter your phone number" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
                 
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
-
-                <label for="volunteerSkills">Skills:</label>
-
-                <!-- Main Skill Categories (Collapsibles) -->
-
-                <!-- Medical and Health Skills -->
-                <button type="button" class="collapsible">Medical and Health Skills</button>
-                <div class="content">
-                    <ul>
-                        <li><input type="checkbox" id="firstAid" name="skills[]" value="First Aid & CPR"> First Aid & CPR</li>
-                        <li><input type="checkbox" id="emt" name="skills[]" value="Emergency Medical Technician (EMT)"> Emergency Medical Technician (EMT)</li>
-                        <li><input type="checkbox" id="mentalHealth" name="skills[]" value="Mental Health Support"> Mental Health Support</li>
-                        <li><input type="checkbox" id="psychFirstAid" name="skills[]" value="Psychological First Aid"> Psychological First Aid</li>
-                    </ul>
+                <div>
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
-                <!-- Fundraising and Advocacy -->
-                <button class="collapsible" onclick="toggleSkills('fundraisingSkills')">Fundraising and Advocacy</button>
-                <div id="fundraisingSkills" class="content">
-                    <ul>
-                        <li><input type="checkbox" id="fundraising" name="skills[]" value="Fundraising"> Fundraising</li>
-                        <li><input type="checkbox" id="grantWriting" name="skills[]" value="Grant Writing"> Grant Writing</li>
-                    </ul>
+                <div>
+                    <label for="volunteerSkills" class="block text-sm font-medium text-gray-700">Skills</label>
+                    <!-- Main Skill Categories (Collapsibles) -->
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Medical and Health Skills</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="firstAid" name="skills[]" value="First Aid & CPR"> First Aid & CPR</li>
+                            <li><input type="checkbox" id="emt" name="skills[]" value="Emergency Medical Technician (EMT)"> Emergency Medical Technician (EMT)</li>
+                            <li><input type="checkbox" id="mentalHealth" name="skills[]" value="Mental Health Support"> Mental Health Support</li>
+                            <li><input type="checkbox" id="psychFirstAid" name="skills[]" value="Psychological First Aid"> Psychological First Aid</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Fundraising and Advocacy</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="fundraising" name="skills[]" value="Fundraising"> Fundraising</li>
+                            <li><input type="checkbox" id="grantWriting" name="skills[]" value="Grant Writing"> Grant Writing</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Search and Rescue Skills</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="sar" name="skills[]" value="Search and Rescue (SAR)"> Search and Rescue (SAR)</li>
+                            <li><input type="checkbox" id="waterRescue" name="skills[]" value="Water Rescue"> Water Rescue</li>
+                            <li><input type="checkbox" id="urbanSar" name="skills[]" value="Urban Search and Rescue"> Urban Search and Rescue</li>
+                            <li><input type="checkbox" id="heavyEquipment" name="skills[]" value="Heavy Equipment Operation (for debris removal)"> Heavy Equipment Operation (for debris removal)</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Logistics and Supply Management</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="logisticsCoord" name="skills[]" value="Logistics Coordination"> Logistics Coordination</li>
+                            <li><input type="checkbox" id="supplyChain" name="skills[]" value="Supply Chain Management"> Supply Chain Management</li>
+                            <li><input type="checkbox" id="inventoryMgmt" name="skills[]" value="Inventory Management"> Inventory Management</li>
+                            <li><input type="checkbox" id="shelterSetup" name="skills[]" value="Shelter Setup"> Shelter Setup</li>
+                            <li><input type="checkbox" id="waterPurification" name="skills[]" value="Water Purification"> Water Purification</li>
+                            <li><input type="checkbox" id="foodDistribution" name="skills[]" value="Food Distribution"> Food Distribution</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Safety and Risk Management</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="firefighting" name="skills[]" value="Firefighting"> Firefighting</li>
+                            <li><input type="checkbox" id="hazardousMaterials" name="skills[]" value="Hazardous Materials Handling"> Hazardous Materials Handling</li>
+                            <li><input type="checkbox" id="riskMgmt" name="skills[]" value="Risk Management"> Risk Management</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <!-- Search and Rescue Skills -->
-                <button type="button" class="collapsible">Search and Rescue Skills</button>
-                <div class="content">
-                    <ul>
-                        <li><input type="checkbox" id="sar" name="skills[]" value="Search and Rescue (SAR)"> Search and Rescue (SAR)</li>
-                        <li><input type="checkbox" id="waterRescue" name="skills[]" value="Water Rescue"> Water Rescue</li>
-                        <li><input type="checkbox" id="urbanSar" name="skills[]" value="Urban Search and Rescue"> Urban Search and Rescue</li>
-                        <li><input type="checkbox" id="heavyEquipment" name="skills[]" value="Heavy Equipment Operation (for debris removal)"> Heavy Equipment Operation (for debris removal)</li>
-                    </ul>
+                <div>
+                    <label for="institutionName" class="block text-sm font-medium text-gray-700">Institution Name</label>
+                    <input type="text" id="institutionName" name="institutionName" placeholder="Enter your institution name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
-                <!-- Logistics and Supply Management -->
-                <button class="collapsible" onclick="toggleSkills('logisticsSkills')">Logistics and Supply Management</button>
-                <div id="logisticsSkills" class="content">
-                    <ul>
-                        <li><input type="checkbox" id="logisticsCoord" name="skills[]" value="Logistics Coordination"> Logistics Coordination</li>
-                        <li><input type="checkbox" id="supplyChain" name="skills[]" value="Supply Chain Management"> Supply Chain Management</li>
-                        <li><input type="checkbox" id="inventoryMgmt" name="skills[]" value="Inventory Management"> Inventory Management</li>
-                        <li><input type="checkbox" id="shelterSetup" name="skills[]" value="Shelter Setup"> Shelter Setup</li>
-                        <li><input type="checkbox" id="waterPurification" name="skills[]" value="Water Purification"> Water Purification</li>
-                        <li><input type="checkbox" id="foodDistribution" name="skills[]" value="Food Distribution"> Food Distribution</li>
-                    </ul>
+                <div>
+                    <label for="course" class="block text-sm font-medium text-gray-700">Course/Field of Study</label>
+                    <select id="course" name="course" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="" disabled selected>Select your course</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business Administration">Business Administration</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Law">Law</option>
+                        <option value="Finance">Finance</option>
+                    </select>
                 </div>
 
-                <!-- Safety and Risk Management -->
-                <button class="collapsible" onclick="toggleSkills('safetySkills')">Safety and Risk Management</button>
-                <div id="safetySkills" class="content">
-                    <ul>
-                        <li><input type="checkbox" id="firefighting" name="skills[]" value="Firefighting"> Firefighting</li>
-                        <li><input type="checkbox" id="hazardousMaterials" name="skills[]" value="Hazardous Materials Handling"> Hazardous Materials Handling</li>
-                        <li><input type="checkbox" id="riskMgmt" name="skills[]" value="Risk Management"> Risk Management</li>
-                    </ul>
+                <div>
+                    <label for="academicYear" class="block text-sm font-medium text-gray-700">Academic Year/Level</label>
+                    <input type="text" id="academicYear" name="academicYear" placeholder="Enter your academic year/level" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
-                <!-- Educational Information -->
-                <label for="institutionName">Institution Name:</label>
-                <input type="text" id="institutionName" name="institutionName" placeholder="Enter your institution name" required>
-
-                <!-- Course/Field of Study -->
-                <label for="course">Course/Field of Study:</label>
-                <select id="course" name="course" required>
-                    <option value="" disabled selected>Select your course</option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Business Administration">Business Administration</option>
-                    <option value="Healthcare">Healthcare</option>
-                    <option value="Law">Law</option>
-                    <option value="Finance">Finance</option>
-                </select>
-
-                <!-- Collapsible Section for Course Fields (Initially hidden) -->
-                <div id="courseFieldsContent" class="content" style="display: none;">
-                    <h3>Select Your Course Fields:</h3>
-                    
-                    <!-- Checkboxes for Courses -->
-                    <label><input type="checkbox" name="courseFields[]" value="Engineering"> Engineering</label><br>
-                    <label><input type="checkbox" name="courseFields[]" value="Business Administration"> Business Administration</label><br>
-                    <label><input type="checkbox" name="courseFields[]" value="Healthcare"> Healthcare</label><br>
-                    <label><input type="checkbox" name="courseFields[]" value="Law"> Law</label><br>
-                    <label><input type="checkbox" name="courseFields[]" value="Finance"> Finance</label><br>
+                <div>
+                    <label for="aadharCard" class="block text-sm font-medium text-gray-700">Aadhar Card / Government-issued ID</label>
+                    <input type="file" id="aadharCard" name="aadharCard" accept="application/pdf,image/*" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
-                <label for="academicYear">Academic Year/Level:</label>
-                <input type="text" id="academicYear" name="academicYear" placeholder="Enter your academic year/level" required>
+                <div>
+                    <label for="photo" class="block text-sm font-medium text-gray-700">Passport-sized Photograph</label>
+                    <input type="file" id="photo" name="photo" accept="image/*" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <!-- Aadhar Card / Government ID -->
-                <label for="aadharCard">Aadhar Card / Government-issued ID:</label>
-                <input type="file" id="aadharCard" name="aadharCard" accept="application/pdf,image/*" required>
+                <div>
+                    <label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <!-- Passport-sized Photograph -->
-                <label for="photo">Passport-sized Photograph:</label>
-                <input type="file" id="photo" name="photo" accept="image/*" required>
+                <div class="flex items-center">
+                    <input type="checkbox" id="certified" name="certified" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="certified" class="ml-2 block text-sm text-gray-900">NSS/NCC Certified</label>
+                </div>
 
-                <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
+                <div>
+                    <label for="certFile" class="block text-sm font-medium text-gray-700">Upload NSS/NCC Certification (PDF only)</label>
+                    <input type="file" id="certFile" name="certFile" accept="application/pdf" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
 
-                <label for="certified">
-                    <input type="checkbox" id="certified" name="certified">
-                    NSS/NCC Certified
-                </label>
-
-                <!-- File input for certification -->
-                <label for="certFile">Upload NSS/NCC Certification (PDF only):</label>
-                <input type="file" id="certFile" name="certFile" accept="application/pdf">
-
-                <input type="submit" value="Join as Volunteer">
+                <div class="text-center mt-6">
+                    <input type="submit" value="Join as Volunteer" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">
+                </div>
             </form>
         </div>
-
-        <!-- Feedback Section -->
-        <!-- <div class="feedback-container">
-            <h2>Feedback on Volunteer Management</h2>
-            <form action="submit_feedback.php" method="post">
-                <label for="feedbackName">Your Name:</label>
-                <input type="text" id="feedbackName" name="feedbackName" placeholder="Enter your name">
-
-                <label for="feedbackEmail">Your Email:</label>
-                <input type="email" id="feedbackEmail" name="feedbackEmail" placeholder="Enter your email" required>
-
-                <label for="feedbackMessage">Your Feedback:</label>
-                <textarea id="feedbackMessage" name="feedbackMessage" rows="4" placeholder="Share your feedback or suggestions" required></textarea>
-
-                <input type="submit" value="Submit Feedback">
-            </form>
-        </div> -->
     </div>
 
     <script>

@@ -4,113 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donate Money</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        h1 {
-            margin-bottom: 30px;
-            color: #003366;
-            text-align: center;
-        }
-        .form-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            font-size: 18px;
-            color: #003366;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-        .submit-btn {
-            display: inline-block;
-            padding: 15px 30px;
-            background-color: #007bff;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .submit-btn:hover {
-            background-color: #0056b3;
-        }
-        .flash-messages {
-            margin-bottom: 20px;
-            background-color: #f8d7da;
-            padding: 15px;
-            border-radius: 8px;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .flash-message {
-            margin: 0;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body>
-    <div class="container">
-        <nav>
-            <a href="/donate">back</a>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+        <nav class="mb-6">
+            <a href="/donate" class="text-blue-600 hover:underline">Back</a>
         </nav>
-        <h1>Donate Money</h1>
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">Donate Money</h1>
         
         <!-- Flash Messages -->
-        <div class="flash-messages">
-            <p class="flash-message">Thank you for your generosity! Please fill out the form below to make a donation. Your contribution can help us make a meaningful impact.</p>
+        <div class="flash-messages bg-red-100 p-4 rounded-lg mb-6">
+            <p class="flash-message text-red-700">Thank you for your generosity! Please fill out the form below to make a donation. Your contribution can help us make a meaningful impact.</p>
         </div>
         
         <!-- Donation Form -->
-        <div class="form-container">
-            <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+        <form id="donationForm" class="space-y-6">
+            <div>
+                <label for="full_name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
-            <div class="form-group">
-                <label for="amount">Donation Amount (INR)</label>
-                <input type="number" id="amount" name="amount" placeholder="Enter amount to donate" required>
+            <div>
+                <label for="amount" class="block text-sm font-medium text-gray-700">Donation Amount (INR)</label>
+                <input type="number" id="amount" name="amount" placeholder="Enter amount to donate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
-        </div>
 
-        <!-- Submit Button -->
-        <div style="text-align: center; margin-top: 30px;">
-            <button class="submit-btn" onclick="initiatePayment()">Donate Now</button>
-        </div>
+            <div class="text-center mt-6">
+                <button type="button" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105" onclick="initiatePayment()">Donate Now</button>
+            </div>
+        </form>
     </div>
 
     <script>
