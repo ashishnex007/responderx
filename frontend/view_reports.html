@@ -14,22 +14,46 @@
         <div class="container mx-auto flex justify-between items-center">
             <a href="/dashboard" class="text-white text-2xl font-bold">ResponderX</a>
             <div>
-                <a href="contact.html" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">Contact</a>
+                <a href="/contact" class="text-white px-4 py-2 hover:bg-blue-700 rounded-xl">Contact</a>
             </div>
         </div>
     </nav>
 
     <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Reports</h1>
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Incident Reports</h1>
+        
+        <div class="mb-6 flex justify-evenly items-center">
+            <input type="text" id="search" placeholder="Search by description or type" class="mt-1 block w-2/3 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <button id="searchButton" class="ml-4 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Search</button>
+        </div>
+
+        <div class="mb-6 px-24">
+            <label for="sort" class="block text-sm font-medium text-gray-700">Sort by:</label>
+            <select id="sort" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <option value="latest">Latest Reports</option>
+                <option value="oldest">Oldest Reports</option>
+            </select>
+        </div>
+
         <div id="reportsList" class="space-y-6"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script>
         async function fetchReports() {
-            const response = await fetch('/api/reports');
-            const reports = await response.json();
+            try {
+                const response = await fetch('/api/reports');
+                const reports = await response.json();
+                displayReports(reports);
+            } catch (error) {
+                console.error('Error fetching reports:', error);
+            }
+        }
+
+        function displayReports(reports) {
             const reportsList = document.getElementById('reportsList');
+            reportsList.innerHTML = '';
 
             reports.forEach(report => {
                 const reportDiv = document.createElement('div');
@@ -71,12 +95,63 @@
                 };
                 reportDiv.appendChild(readMoreButton);
 
+                const downloadButton = document.createElement('button');
+                downloadButton.className = 'bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition-transform transform hover:scale-105 ml-4';
+                downloadButton.textContent = 'Download PDF';
+                downloadButton.onclick = () => {
+                    downloadReportAsPDF(reportDiv);
+                };
+                reportDiv.appendChild(downloadButton);
+
                 reportsList.appendChild(reportDiv);
 
                 // Fix map sizing issues
                 map.invalidateSize();
             });
         }
+
+        function downloadReportAsPDF(reportDiv) {
+            html2pdf(reportDiv, {
+                margin: 1,
+                filename: 'report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            });
+        }
+
+        function searchReports() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const reports = Array.from(document.getElementById('reportsList').children);
+
+            reports.forEach(report => {
+                const description = report.querySelector('p').textContent.toLowerCase();
+                const type = report.querySelectorAll('p')[1].textContent.toLowerCase();
+                if (description.includes(searchInput) || type.includes(searchInput)) {
+                    report.style.display = '';
+                } else {
+                    report.style.display = 'none';
+                }
+            });
+        }
+
+        function sortReports() {
+            const sortValue = document.getElementById('sort').value;
+            const reports = Array.from(document.getElementById('reportsList').children);
+
+            reports.sort((a, b) => {
+                const aValue = new Date(a.querySelectorAll('p')[2].textContent.split(': ')[1]);
+                const bValue = new Date(b.querySelectorAll('p')[2].textContent.split(': ')[1]);
+                return sortValue === 'latest' ? bValue - aValue : aValue - bValue;
+            });
+
+            const reportsList = document.getElementById('reportsList');
+            reportsList.innerHTML = '';
+            reports.forEach(report => reportsList.appendChild(report));
+        }
+
+        document.getElementById('searchButton').addEventListener('click', searchReports);
+        document.getElementById('sort').addEventListener('change', sortReports);
 
         document.addEventListener('DOMContentLoaded', fetchReports);
     </script>

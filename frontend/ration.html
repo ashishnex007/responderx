@@ -4,253 +4,97 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ration Management Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    /* Existing CSS styles remain unchanged */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-    }
-
-    .navbar {
-      background-color: #4CAF50;
-      overflow: hidden;
-      padding: 10px;
-    }
-
-    .navbar a {
-      float: left;
-      color: white;
-      padding: 14px 20px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 17px;
-    }
-
-    .navbar a:hover {
-      background-color: #ddd;
-      color: black;
-    }
-
-    .tabs {
-      display: flex;
-      margin-top: 20px;
-    }
-
-    .tab-button {
-      padding: 15px;
-      flex: 1;
-      text-align: center;
-      background-color: #f1f1f1;
-      cursor: pointer;
-      border: 1px solid #ccc;
-    }
-
-    .tab-button:hover {
-      background-color: #ddd;
-    }
-
-    .tab-content {
-      display: none;
-      padding: 20px;
-      background-color: white;
-      border: 1px solid #ddd;
-      margin-top: 20px;
-    }
-
-    .active {
-      display: block;
-    }
-
-    .card {
-      background-color: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 5px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .chart-placeholder {
-      width: 100%;
-      height: 300px;
-      background-color: #f1f1f1;
-      text-align: center;
-      line-height: 300px;
-      color: #777;
-      border: 1px solid #ddd;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    .container {
-      width: 80%;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group input {
-      padding: 8px;
-      width: 200px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background-color: #45a049;
-    }
-
-    #budget-ratio {
-      font-size: 18px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    .chart-container {
-      width: 50%;
-      margin-top: 30px;
-    }
-
-    canvas {
-      width: 100% !important;
-      height: 400px !important;
-    }
-
-    /* New styles for the distributed resources table */
-    #distributed-resources {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-    }
-
-    #distributed-resources th,
-    #distributed-resources td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-
-    #distributed-resources th {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    #distributed-resources td {
-      background-color: #f9f9f9;
-    }
-  </style>
 </head>
-<body>
-  <div class="navbar">
-    
-    <a href="admin.html">back</a>
-    
-  </div>
-
-  <div class="tabs">
-    <div class="tab-button" onclick="showTab('budget')">Budget & Financial Management</div>
-    <div class="tab-button" onclick="showTab('inventory')">Ration Inventory Management</div>
-    <div class="tab-button" onclick="showTab('distribution')">Ration Distribution</div>
-  </div>
-
-  <!-- Budget Tab -->
-  <div id="budget" class="tab-content">
-    <div class="card">
-      <h3>Ration Management Budget Overview</h3>
-      <div class="chart-placeholder" id="budgetChartContainer">Budget vs Expenditure Chart</div>
-      <form id="budget-form">
-        <label for="allocated-budget">Allocated Budget:</label>
-        <input type="number" id="allocated-budget" name="allocated-budget" required><br><br>
-        <label for="expenditure">Expenditure:</label>
-        <input type="number" id="expenditure" name="expenditure" required><br><br>
-        <button type="submit">Update Budget Data</button>
-      </form>
-      <div id="budget-ratio"></div>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+  <nav class="bg-green-600 p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="/admin" class="text-white text-2xl font-bold">ResponderX</a>
+      <a href="/admin" class="text-white px-4 py-2 hover:bg-green-700 rounded-md">Back</a>
     </div>
-  </div>
+  </nav>
 
-  <!-- Inventory Tab -->
-  <div id="inventory" class="tab-content">
-    <div class="card">
-      <h3>Ration Inventory Management</h3>
-      <div class="chart-placeholder" id="inventoryChartContainer">Inventory Levels Chart</div>
-      <table>
+  <div class="container mx-auto mt-10">
+    <div class="flex justify-center mb-6">
+      <button class="tab-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l" onclick="showTab('budget')">Budget & Financial Management</button>
+      <button class="tab-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4" onclick="showTab('inventory')">Ration Inventory Management</button>
+      <button class="tab-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-r" onclick="showTab('distribution')">Ration Distribution</button>
+    </div>
+
+    <!-- Budget Tab -->
+    <div id="budget" class="tab-content bg-white p-8 rounded-lg shadow-lg">
+      <h3 class="text-2xl font-bold mb-4">Ration Management Budget Overview</h3>
+      <div class="chart-container mb-6">
+        <canvas id="budgetChart"></canvas>
+      </div>
+      <form id="budget-form" class="space-y-4">
+        <div class="form-group">
+          <label for="allocated-budget" class="block text-sm font-medium text-gray-700">Allocated Budget:</label>
+          <input type="number" id="allocated-budget" name="allocated-budget" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+        </div>
+        <div class="form-group">
+          <label for="expenditure" class="block text-sm font-medium text-gray-700">Expenditure:</label>
+          <input type="number" id="expenditure" name="expenditure" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+        </div>
+        <button type="submit" class="btn bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700">Update Budget Data</button>
+      </form>
+      <div id="budget-ratio" class="mt-4 text-lg font-semibold"></div>
+    </div>
+
+    <!-- Inventory Tab -->
+    <div id="inventory" class="tab-content bg-white p-8 rounded-lg shadow-lg hidden">
+      <h3 class="text-2xl font-bold mb-4">Ration Inventory Management</h3>
+      <div class="chart-container mb-6">
+        <canvas id="inventoryChart"></canvas>
+      </div>
+      <table class="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
-            <th>Resource Type</th>
-            <th>Current Stock</th>
-            <th>Restock Quantity</th>
-            <th>Distributed Quantity</th>
-            <th>Remaining Stock</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Resource Type</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Current Stock</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Restock Quantity</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Distributed Quantity</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Remaining Stock</th>
           </tr>
         </thead>
-        <tbody id="inventoryTable">
+        <tbody id="inventoryTable" class="text-gray-700">
           <!-- Dynamic rows will be inserted here -->
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- Distribution Tab -->
-  <div id="distribution" class="tab-content">
-    <div class="card">
-      <h3>Ration Distribution</h3>
-      <form id="distribution-form">
-        <label for="resource">Resource:</label>
-        <select id="resource" name="resource">
-          <option value="rice">Rice</option>
-          <option value="wheat">Wheat</option>
-          <option value="pulses">Pulses</option>
-          <option value="sugar">Sugar</option>
-          <option value="salt">Salt</option>
-          <option value="oil">Oil</option>
-        </select><br><br>
-        
-        <label for="quantity">Distributed Quantity (kg):</label>
-        <input type="number" id="quantity" name="quantity" required><br><br>
-        
-        <button type="submit" class="btn">Submit Distribution</button>
+    <!-- Distribution Tab -->
+    <div id="distribution" class="tab-content bg-white p-8 rounded-lg shadow-lg hidden">
+      <h3 class="text-2xl font-bold mb-4">Ration Distribution</h3>
+      <form id="distribution-form" class="space-y-4">
+        <div class="form-group">
+          <label for="resource" class="block text-sm font-medium text-gray-700">Resource:</label>
+          <select id="resource" name="resource" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            <option value="rice">Rice</option>
+            <option value="wheat">Wheat</option>
+            <option value="pulses">Pulses</option>
+            <option value="sugar">Sugar</option>
+            <option value="salt">Salt</option>
+            <option value="oil">Oil</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="quantity" class="block text-sm font-medium text-gray-700">Distributed Quantity (kg):</label>
+          <input type="number" id="quantity" name="quantity" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+        </div>
+        <button type="submit" class="btn bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700">Submit Distribution</button>
       </form>
 
-      <!-- Added the section to display the distributed resources dynamically -->
-      <h4>Distributed Resources:</h4>
-      <table id="distributed-resources">
+      <h4 class="text-xl font-semibold mt-6">Distributed Resources:</h4>
+      <table id="distributed-resources" class="min-w-full bg-white border border-gray-300 mt-4">
         <thead>
           <tr>
-            <th>Resource</th>
-            <th>Quantity (kg)</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Resource</th>
+            <th class="py-2 px-4 bg-green-600 text-white">Quantity (kg)</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="text-gray-700">
           <!-- Distributed resources will be displayed here -->
         </tbody>
       </table>
@@ -271,8 +115,8 @@
     // Function to show the active tab content
     function showTab(tabId) {
       const tabs = document.querySelectorAll('.tab-content');
-      tabs.forEach(tab => tab.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
+      tabs.forEach(tab => tab.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
     }
 
     // Default to show the 'budget' tab on page load
@@ -338,17 +182,17 @@
     // Update remaining stock for a resource
     function updateRemainingStock(resource) {
       let stock = resources[resource];
-      stock.restock = parseInt(document.getElementById(${resource}-restock).value) || 0;
-      stock.distributed = parseInt(document.getElementById(${resource}-distributed).value) || 0;
+      stock.restock = parseInt(document.getElementById(`${resource}-restock`).value) || 0;
+      stock.distributed = parseInt(document.getElementById(`${resource}-distributed`).value) || 0;
       stock.remaining = stock.current + stock.restock - stock.distributed;
 
-      document.getElementById(${resource}-remaining-stock).innerText = stock.remaining;
+      document.getElementById(`${resource}-remaining-stock`).innerText = stock.remaining;
       generateInventoryChart(); // Recalculate the inventory chart
     }
 
     // Generate Inventory Chart
     function generateInventoryChart() {
-      let ctx = document.getElementById('inventoryChartContainer').getContext('2d');
+      let ctx = document.getElementById('inventoryChart').getContext('2d');
       let labels = Object.keys(resources).map(resource => resource.charAt(0).toUpperCase() + resource.slice(1));
       let stockData = Object.values(resources).map(resource => resource.current);
       let remainingData = Object.values(resources).map(resource => resource.remaining);
@@ -389,11 +233,11 @@
       let allocatedBudget = parseFloat(document.getElementById('allocated-budget').value) || 0;
       let expenditure = parseFloat(document.getElementById('expenditure').value) || 0;
       const ratio = allocatedBudget && expenditure ? allocatedBudget / expenditure : 0;
-      const ratioText = ratio ? Budget to Expenditure Ratio: ${ratio.toFixed(2)} : "Invalid values for ratio.";
+      const ratioText = ratio ? `Budget to Expenditure Ratio: ${ratio.toFixed(2)}` : "Invalid values for ratio.";
 
       document.getElementById("budget-ratio").innerText = ratioText;
 
-      let ctx = document.getElementById('budgetChartContainer').getContext('2d');
+      let ctx = document.getElementById('budgetChart').getContext('2d');
 
       new Chart(ctx, {
         type: 'pie',

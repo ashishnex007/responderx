@@ -20,11 +20,11 @@
         </div>
         
         <!-- Donation Form -->
-        <form action="/donate-resource" method="POST" class="space-y-6">
+        <form id="donationForm" class="space-y-6">
             <!-- Personal Information -->
             <div>
-                <label for="full_name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
             <div>
@@ -39,8 +39,8 @@
 
             <!-- Resource Information -->
             <div>
-                <label for="resource_type" class="block text-sm font-medium text-gray-700">Type of Resource</label>
-                <select id="resource_type" name="resource_type" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <label for="resourceType" class="block text-sm font-medium text-gray-700">Type of Resource</label>
+                <select id="resourceType" name="resourceType" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     <option value="food">Food</option>
                     <option value="clothing">Clothing</option>
                     <option value="medical_supplies">Medical Supplies</option>
@@ -63,8 +63,8 @@
 
             <!-- Collection/Delivery Details -->
             <div>
-                <label for="donation_timeframe" class="block text-sm font-medium text-gray-700">When are the resources available for donation?</label>
-                <input type="text" id="donation_timeframe" name="donation_timeframe" placeholder="Enter date/time for donation" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <label for="donationTimeframe" class="block text-sm font-medium text-gray-700">When are the resources available for donation?</label>
+                <input type="text" id="donationTimeframe" name="donationTimeframe" placeholder="Enter date/time for donation" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
             <!-- Location Information -->
@@ -136,6 +136,37 @@
 
         // Initialize the map
         document.addEventListener('DOMContentLoaded', initMap);
+
+        // Handle form submission
+        document.getElementById('donationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Convert compliance to boolean
+            data.compliance = data.compliance === 'on';
+
+            try {
+                const response = await fetch('/api/resources/donate-resource', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Resource donation submitted successfully');
+                    e.target.reset();
+                } else {
+                    alert('Error submitting resource donation');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting resource donation');
+            }
+        });
     </script>
 </body>
 </html>

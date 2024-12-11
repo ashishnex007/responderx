@@ -29,7 +29,7 @@
         <!-- Title -->
         <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Admin Dashboard</h1>
 
-        <div class="grid grid-cols-3 gap-6 mb-8 px-12">
+        <div class="grid grid-cols-4 gap-6 mb-8 px-12">
             <!-- Volunteers Stat -->
             <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
                 <div class="flex items-center justify-between">
@@ -41,10 +41,10 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                         </svg>
                         <h3 class="text-xl font-semibold text-gray-700 mt-2">Active Volunteers</h3>
-                        <p class="text-3xl font-bold text-gray-900">23</p>
-                        <p class="text-md text-green-600">+12 this week</p>
+                        <p id="volunteersCount" class="text-3xl font-bold text-gray-900">0</p>
+                        <!-- <p class="text-md text-green-600">+12 this week</p> -->
                         <div class="pt-4">
-                            <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all volunteers</button>
+                            <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors" onclick="window.location.href='/all_volunteers'">View all volunteers</button>
                         </div>
                     </div>
                 </div>
@@ -60,10 +60,10 @@
                             <path d="M12 17h.01"/>
                         </svg>
                         <h3 class="text-xl font-semibold text-gray-700 mt-2">Number of Reports</h3>
-                        <p class="text-3xl font-bold text-gray-900">14</p>
-                        <p class="text-md text-red-600">+3 from yesterday</p>
+                        <p id="reportsCount" class="text-3xl font-bold text-gray-900">0</p>
+                        <!-- <p class="text-md text-red-600">+3 from yesterday</p> -->
                         <div class="pt-4">
-                            <button class="bg-red-50 text-red-600 px-4 py-2 rounded-xl hover:bg-red-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all Reports</button>
+                            <button class="bg-red-50 text-red-600 px-4 py-2 rounded-xl hover:bg-red-100 transition-colors" onclick="window.location.href='/reports'">View all Reports</button>
                         </div>
                     </div>
                 </div>
@@ -74,11 +74,25 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <svg fill="#000000" width="32" height="32" viewBox="-96 0 512 512" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M308 96c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v44.748c0 6.627 5.373 12 12 12h85.28c27.308 0 48.261 9.958 60.97 27.252H12c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h158.757c-6.217 36.086-32.961 58.632-74.757 58.632H12c-6.627 0-12 5.373-12 12v53.012c0 3.349 1.4 6.546 3.861 8.818l165.052 152.356a12.001 12.001 0 0 0 8.139 3.182h82.562c10.924 0 16.166-13.408 8.139-20.818L116.871 319.906c76.499-2.34 131.144-53.395 138.318-127.906H308c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12h-58.69c-3.486-11.541-8.28-22.246-14.252-32H308z"></path></g></svg>
-                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Resources Donated</h3>
-                        <p class="text-3xl font-bold text-gray-900">₹4,600</p>
-                        <p class="text-md text-green-600">+₹1,200 this month</p>
+                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Donations</h3>
+                        <p id="donationsCount" class="text-3xl font-bold text-gray-900">₹0</p>
+                        <!-- <p class="text-md text-purple-600">+₹1,200 this month</p> -->
                         <div class="pt-4">
-                            <button class="bg-green-50 text-green-600 px-4 py-2 rounded-xl hover:bg-green-100 transition-colors" onclick="window.location.href='/register_volunteer'">View all Resources</button>
+                            <button class="bg-purple-50 text-purple-600 px-4 py-2 rounded-xl hover:bg-purple-100 transition-colors" onclick="window.location.href='/view_donations'">View all Donations</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Donated Stat -->
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mt-2">Resources Donated</h3>
+                        <p id="resourcesCount" class="text-3xl font-bold text-gray-900">0</p>
+                        <!-- <p class="text-md text-green-600">+₹1,200 this month</p> -->
+                        <div class="pt-4">
+                            <button class="bg-green-50 text-green-600 px-4 py-2 rounded-xl hover:bg-green-100 transition-colors" onclick="window.location.href='/view_resources'">View all Resources</button>
                         </div>
                     </div>
                 </div>
@@ -92,7 +106,7 @@
             <div class="card bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Ration Management</h2>
                 <p class="text-lg text-gray-600 mb-6">Nearby Godowns</p>
-                <button class="bg-purple-50 text-purple-600 px-4 py-2 rounded-xl hover:bg-purple-100 transition-colors" onclick="window.location.href='/donate'">View Godowns</button>
+                <button class="bg-purple-50 text-purple-600 px-4 py-2 rounded-xl hover:bg-purple-100 transition-colors" onclick="window.location.href='/ration_management'">View Godowns</button>
             </div>
 
             <!-- Settings -->
@@ -103,5 +117,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        async function fetchStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const stats = await response.json();
+
+                document.getElementById('volunteersCount').textContent = stats.volunteers;
+                document.getElementById('reportsCount').textContent = stats.reports;
+                document.getElementById('donationsCount').textContent = `₹${stats.donations}`;
+                document.getElementById('resourcesCount').textContent = stats.resources;
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchStats);
+    </script>
 </body>
 </html>

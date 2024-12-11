@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Volunteers</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/volunteer_dashboard" class="text-white text-2xl font-bold">ResponderX</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">All Volunteers</h1>
+        
+        <div class="mb-6">
+            <input type="text" id="search" placeholder="Search by name or email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+
+        <div class="mb-6">
+            <label for="sort" class="block text-sm font-medium text-gray-700">Sort by:</label>
+            <select id="sort" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <option value="name">Name</option>
+                <option value="email">Email</option>
+                <option value="dateOfBirth">Date of Birth</option>
+            </select>
+        </div>
+
+        <div id="volunteersList" class="space-y-4"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        async function fetchVolunteers() {
+            try {
+                const response = await fetch('/api/users/users');
+                const volunteers = await response.json();
+                displayVolunteers(volunteers);
+            } catch (error) {
+                console.error('Error fetching volunteers:', error);
+            }
+        }
+
+        function displayVolunteers(volunteers) {
+            const volunteersList = document.getElementById('volunteersList');
+            volunteersList.innerHTML = '';
+
+            volunteers
+                .filter(volunteer => volunteer.name) // Exclude users without a name
+                .forEach(volunteer => {
+                    const volunteerDiv = document.createElement('div');
+                    volunteerDiv.className = 'bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex justify-between items-center';
+
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'w-2/3';
+
+                    const name = document.createElement('h2');
+                    name.className = 'text-2xl font-bold text-gray-800 mb-2';
+                    name.textContent = volunteer.name;
+                    infoDiv.appendChild(name);
+
+                    const email = document.createElement('p');
+                    email.className = 'text-gray-600 mb-2';
+                    email.textContent = `Email: ${volunteer.email}`;
+                    infoDiv.appendChild(email);
+
+                    const phoneNumber = document.createElement('p');
+                    phoneNumber.className = 'text-gray-600 mb-2';
+                    phoneNumber.textContent = `Phone: ${volunteer.phoneNumber}`;
+                    infoDiv.appendChild(phoneNumber);
+
+                    const dob = document.createElement('p');
+                    dob.className = 'text-gray-600 mb-2';
+                    dob.textContent = `Date of Birth: ${new Date(volunteer.dateOfBirth).toLocaleDateString()}`;
+                    infoDiv.appendChild(dob);
+
+                    const skills = document.createElement('p');
+                    skills.className = 'text-gray-600 mb-2';
+                    skills.textContent = `Skills: ${volunteer.skills.join(', ')}`;
+                    infoDiv.appendChild(skills);
+
+                    const institution = document.createElement('p');
+                    institution.className = 'text-gray-600 mb-2';
+                    institution.textContent = `Institution: ${volunteer.institution || 'Not available'}`;
+                    infoDiv.appendChild(institution);
+
+                    const location = document.createElement('p');
+                    location.className = 'text-gray-600 mb-2';
+                    location.textContent = `Location: ${volunteer.location || 'Not available'}`;
+                    infoDiv.appendChild(location);
+
+                    volunteerDiv.appendChild(infoDiv);
+
+                    if (volunteer.location) {
+                        const mapDiv = document.createElement('div');
+                        mapDiv.className = 'w-1/3 h-32 rounded-lg shadow';
+                        volunteerDiv.appendChild(mapDiv);
+
+                        const [lat, lng] = volunteer.location.replace('Latitude: ', '').replace('Longitude: ', '').split(', ').map(Number);
+                        const map = L.map(mapDiv).setView([lat, lng], 13);
+
+                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+
+                        L.marker([lat, lng]).addTo(map);
+
+                        // Fix map sizing issues
+                        setTimeout(() => {
+                            map.invalidateSize();
+                        }, 100);
+                    }
+
+                    volunteersList.appendChild(volunteerDiv);
+                });
+        }
+
+        function searchVolunteers() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const volunteers = Array.from(document.getElementById('volunteersList').children);
+
+            volunteers.forEach(volunteer => {
+                const name = volunteer.querySelector('h2').textContent.toLowerCase();
+                const email = volunteer.querySelector('p').textContent.toLowerCase();
+                if (name.includes(searchInput) || email.includes(searchInput)) {
+                    volunteer.style.display = '';
+                } else {
+                    volunteer.style.display = 'none';
+                }
+            });
+        }
+
+        function sortVolunteers() {
+            const sortValue = document.getElementById('sort').value;
+            const volunteers = Array.from(document.getElementById('volunteersList').children);
+
+            volunteers.sort((a, b) => {
+                const aValue = a.querySelector(`.${sortValue}`).textContent.toLowerCase();
+                const bValue = b.querySelector(`.${sortValue}`).textContent.toLowerCase();
+                return aValue.localeCompare(bValue);
+            });
+
+            const volunteersList = document.getElementById('volunteersList');
+            volunteersList.innerHTML = '';
+            volunteers.forEach(volunteer => volunteersList.appendChild(volunteer));
+        }
+
+        document.getElementById('search').addEventListener('input', searchVolunteers);
+        document.getElementById('sort').addEventListener('change', sortVolunteers);
+
+        document.addEventListener('DOMContentLoaded', fetchVolunteers);
+    </script>
+</body>
+</html>

@@ -6,6 +6,8 @@ const connectDB = require('./config/connectDB');
 // * controllers
 const userController = require('./controllers/userController');
 const reportController = require('./controllers/reportController');
+const resourceController = require('./controllers/resourceController');
+const statsController = require('./controllers/statController');
 
 const app = express();
 const port = 3000;
@@ -56,8 +58,16 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });
 
+app.get('/ration_management', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/ration.html'));
+});
+
 app.get('/register_volunteer', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/volunteers.html'));
+});
+
+app.get('/all_volunteers', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/all_volunteers.html'));
 });
 
 app.get('/contact', (req, res) => {
@@ -84,6 +94,14 @@ app.get('/donate/resources', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/donate_resources.html'));
 });
 
+app.get('/view_donations', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/view_donations.html'));
+});
+
+app.get('/view_resources', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/view_resources.html'));
+});
+
 app.get('/logout', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/logout.html'));
 });
@@ -91,6 +109,8 @@ app.get('/logout', (req, res) => {
 // Backend routes
 app.use('/api/users', userController);
 app.use('/api/reports', reportController);
+app.use('/api/resources', resourceController);
+app.use('/api/stats', statsController);
 
 app.listen(port, () => {
   console.log(`ResponderX listening at http://localhost:${port}`);

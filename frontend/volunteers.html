@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Management</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <nav class="bg-blue-900 p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="/dashboard" class="text-white text-2xl font-bold">ResponderX</a>
+            <a href="/dashboard" class="text-white text-2xl font-bold">Home</a>
         </div>
     </nav>
 
@@ -138,6 +139,15 @@
                     <input type="date" id="dob" name="dob" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
+                <!-- Location Information -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700">Location:</label>
+                    <button type="button" onclick="getLocation()" class="mt-1 mb-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">Use Current Location</button>
+                    <input type="text" id="location" name="location" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div id="map" class="h-64 w-full rounded-lg shadow mb-6"></div>
+
                 <div class="flex items-center">
                     <input type="checkbox" id="certified" name="certified" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                     <label for="certified" class="ml-2 block text-sm text-gray-900">NSS/NCC Certified</label>
@@ -155,7 +165,57 @@
         </div>
     </div>
 
+    <!-- Leaflet JS for map functionality -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+        let map;
+        let marker;
+
+        function initMap() {
+            map = L.map('map').setView([51.505, -0.09], 13); // Default location is London
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function (event) {
+                placeMarker(event.latlng);
+                document.getElementById('location').value = `Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}`;
+            });
+
+            // Fix map sizing issues
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                marker.setLatLng(location);
+            } else {
+                marker = L.marker(location).addTo(map);
+            }
+            map.setView(location);
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    document.getElementById('location').value = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                    let currentLocation = L.latLng(latitude, longitude);
+                    placeMarker(currentLocation);
+                    map.setView(currentLocation);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Initialize the map
+        document.addEventListener('DOMContentLoaded', initMap);
+
         // Collapsible functionality
         var coll = document.getElementsByClassName("collapsible");
         for (var i = 0; i < coll.length; i++) {
@@ -182,7 +242,8 @@
                 phoneNumber: formData.get('volunteerPhone'),
                 name: formData.get('volunteerName'),
                 skills: formData.getAll('skills[]'),
-                dateOfBirth: formData.get('dob')
+                dateOfBirth: formData.get('dob'),
+                location: formData.get('location')
             };
 
             console.log(user);

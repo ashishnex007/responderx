@@ -68,8 +68,14 @@
                 handler: function (response) {
                     // Payment successful
                     alert('Thank you for your donation! Payment ID: ' + response.razorpay_payment_id);
+
+                    console.log('Payment ID:', response.razorpay_payment_id);
+                    console.log('Full Name:', fullName);
+                    console.log('Email:', email);
+                    console.log('Amount:', amount);
                     
-                    // Optional: You can send the payment details to your server here
+                    // Create transaction
+                    createTransaction(fullName, email, amount, response.razorpay_payment_id);
                 },
                 prefill: {
                     name: fullName,
@@ -85,6 +91,34 @@
             
             // Open Razorpay checkout
             rzp.open();
+        }
+
+        async function createTransaction(fullName, email, amount, paymentId) {
+            try {
+                const response = await fetch('/api/resources', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: fullName,
+                        email,
+                        amount,
+                        transactionId: paymentId
+                    })
+                });
+
+                console.log('Response:', response.data);
+
+                if (!response.ok) {
+                    throw new Error('Failed to create transaction');
+                }
+
+                const data = await response.json();
+                console.log('Transaction created:', data);
+            } catch (error) {
+                console.error('Error creating transaction:', error);
+            }
         }
     </script>
 </body>

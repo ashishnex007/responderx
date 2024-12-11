@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Donated Resources</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/dashboard" class="text-white text-2xl font-bold">ResponderX</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-4xl font-bold text-center text-gray-800">All Donated Resources</h1>
+            <button id="exportButton" class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition-transform transform hover:scale-105">Export to PDF</button>
+        </div>
+        
+        <div class="mb-6">
+            <input type="text" id="search" placeholder="Search by name or email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+
+        <div class="mb-6">
+            <label for="sort" class="block text-sm font-medium text-gray-700">Sort by:</label>
+            <select id="sort" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <option value="name">Name</option>
+                <option value="email">Email</option>
+                <option value="quantity">Quantity</option>
+                <option value="date">Date</option>
+            </select>
+        </div>
+
+        <div id="resourcesList" class="space-y-4"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        async function fetchResources() {
+            try {
+                const response = await fetch('/api/resources/resources');
+                const resources = await response.json();
+                displayResources(resources);
+            } catch (error) {
+                console.error('Error fetching resources:', error);
+            }
+        }
+
+        function displayResources(resources) {
+            const resourcesList = document.getElementById('resourcesList');
+            resourcesList.innerHTML = '';
+
+            resources.forEach(resource => {
+                const resourceDiv = document.createElement('div');
+                resourceDiv.className = 'bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300';
+
+                const name = document.createElement('h2');
+                name.className = 'text-2xl font-bold text-gray-800 mb-2';
+                name.textContent = resource.fullName;
+                resourceDiv.appendChild(name);
+
+                const email = document.createElement('p');
+                email.className = 'text-gray-600 mb-2';
+                email.textContent = `Email: ${resource.email}`;
+                resourceDiv.appendChild(email);
+
+                const phone = document.createElement('p');
+                phone.className = 'text-gray-600 mb-2';
+                phone.textContent = `Phone: ${resource.phone}`;
+                resourceDiv.appendChild(phone);
+
+                const resourceType = document.createElement('p');
+                resourceType.className = 'text-gray-600 mb-2';
+                resourceType.textContent = `Resource Type: ${resource.resourceType}`;
+                resourceDiv.appendChild(resourceType);
+
+                const quantity = document.createElement('p');
+                quantity.className = 'text-gray-600 mb-2';
+                quantity.textContent = `Quantity: ${resource.quantity}`;
+                resourceDiv.appendChild(quantity);
+
+                const condition = document.createElement('p');
+                condition.className = 'text-gray-600 mb-2';
+                condition.textContent = `Condition: ${resource.condition}`;
+                resourceDiv.appendChild(condition);
+
+                const donationTimeframe = document.createElement('p');
+                donationTimeframe.className = 'text-gray-600 mb-2';
+                donationTimeframe.textContent = `Donation Timeframe: ${resource.donationTimeframe}`;
+                resourceDiv.appendChild(donationTimeframe);
+
+                const location = document.createElement('p');
+                location.className = 'text-gray-600 mb-2';
+                location.textContent = `Location: ${resource.location}`;
+                resourceDiv.appendChild(location);
+
+                const compliance = document.createElement('p');
+                compliance.className = 'text-gray-600 mb-2';
+                compliance.textContent = `Compliance: ${resource.compliance ? 'Yes' : 'No'}`;
+                resourceDiv.appendChild(compliance);
+
+                const mapDiv = document.createElement('div');
+                mapDiv.className = 'w-full h-64 rounded-lg shadow mb-4';
+                resourceDiv.appendChild(mapDiv);
+
+                const [lat, lng] = resource.location.replace('Latitude: ', '').replace('Longitude: ', '').split(', ').map(Number);
+                const map = L.map(mapDiv).setView([lat, lng], 13);
+
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                L.marker([lat, lng]).addTo(map);
+
+                // Fix map sizing issues
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 100);
+
+                resourcesList.appendChild(resourceDiv);
+            });
+        }
+
+        function searchResources() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const resources = Array.from(document.getElementById('resourcesList').children);
+
+            resources.forEach(resource => {
+                const name = resource.querySelector('h2').textContent.toLowerCase();
+                const email = resource.querySelector('p').textContent.toLowerCase();
+                if (name.includes(searchInput) || email.includes(searchInput)) {
+                    resource.style.display = '';
+                } else {
+                    resource.style.display = 'none';
+                }
+            });
+        }
+
+        function sortResources() {
+            const sortValue = document.getElementById('sort').value;
+            const resources = Array.from(document.getElementById('resourcesList').children);
+
+            resources.sort((a, b) => {
+                let aValue, bValue;
+                if (sortValue === 'quantity') {
+                    aValue = parseFloat(a.querySelector(`.${sortValue}`).textContent);
+                    bValue = parseFloat(b.querySelector(`.${sortValue}`).textContent);
+                } else if (sortValue === 'date') {
+                    aValue = new Date(a.querySelector(`.${sortValue}`).textContent.split(': ')[1]);
+                    bValue = new Date(b.querySelector(`.${sortValue}`).textContent.split(': ')[1]);
+                } else {
+                    aValue = a.querySelector(`.${sortValue}`).textContent.toLowerCase();
+                    bValue = b.querySelector(`.${sortValue}`).textContent.toLowerCase();
+                }
+                return aValue > bValue ? 1 : -1;
+            });
+
+            const resourcesList = document.getElementById('resourcesList');
+            resourcesList.innerHTML = '';
+            resources.forEach(resource => resourcesList.appendChild(resource));
+        }
+
+        function exportToPDF() {
+            const element = document.getElementById('resourcesList');
+            html2pdf(element, {
+                margin: 1,
+                filename: 'resources.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            });
+        }
+
+        document.getElementById('search').addEventListener('input', searchResources);
+        document.getElementById('sort').addEventListener('change', sortResources);
+        document.getElementById('exportButton').addEventListener('click', exportToPDF);
+
+        document.addEventListener('DOMContentLoaded', fetchResources);
+    </script>
+</body>
+</html>

@@ -7,7 +7,7 @@ const User = require("../schemas/UserSchema");
 
 // Signup controller
 router.post('/signup', async (req, res) => {
-  const { username, email, password, phoneNumber, name, skills, dateOfBirth } = req.body;
+  const { username, email, password, phoneNumber, name, skills, dateOfBirth, institution, location } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ 
@@ -17,7 +17,9 @@ router.post('/signup', async (req, res) => {
       phoneNumber, 
       name, 
       skills, 
-      dateOfBirth 
+      dateOfBirth, 
+      institution, 
+      location 
     });
     await newUser.save();
     res.status(201).send('User created');
@@ -40,6 +42,16 @@ router.post('/login', async (req, res) => {
     }
     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
     res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// Get all users controller
+router.get('/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).send(error.message);
   }
