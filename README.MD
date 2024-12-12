@@ -1,16 +1,16 @@
 ## RESPONDERX
  - [ ] bug in report_detail.html - /view_report endpoint - not showing image
- - [ ] dashboard.html - show numbers from db, and add a SOS number
- - [ ] dashboard.html - volunteer dashboard - needs to see the reports
  - [ ] dashboard.html - a dashboard for government bodies
- - [ ] ration.html
  - [ ] better notification system
  - [ ] SOS call
- - [ ] PDF for report and rations
- - [ ] individual pages for each list of reports, rations, volunteers, and resources
  - [x] dashboard.html - volunteer dashboard - these people respond to the reports -> description, pics, critical level, what are the resorces needed (miniumum resources), casualties
  - [x] landing page
  - [x] incident reporting
  - [x] donate.html - payment gateway
  - [x] added chatbot
  - [x] dashboard.html - volunteer dashboard - but needs design changes
+ - [x] dashboard.html - show numbers from db, and add a SOS number
+ - [x] dashboard.html - volunteer dashboard - needs to see the reports
+ - [x] ration.html
+ - [x] individual pages for each list of reports, rations, volunteers, and resources
+ - [x] PDF for report and rations
