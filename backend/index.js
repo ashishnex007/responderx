@@ -58,6 +58,10 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });
 
+app.get('/government', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/government.html'));
+});
+
 app.get('/ration_management', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/ration.html'));
 });
