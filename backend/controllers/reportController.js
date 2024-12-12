@@ -3,6 +3,14 @@ const Report = require('../schemas/reportSchema');
 const multer = require('multer');
 const sharp = require('sharp');
 const router = express.Router();
+const twilio = require("twilio"); // Import Twilio
+const Volunteer = require("../schemas/volunteerSchema");
+
+// Twilio configuration
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
+const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
 
 // Configure multer for media uploads
 const storage = multer.memoryStorage();
@@ -42,7 +50,30 @@ router.post('/submit', upload.single('media'), async (req, res) => {
     });
     
     await newReport.save();
-    res.status(201).send('Report submitted successfully');
+    console.log("Report done");
+    // Fetch volunteers from the database
+    const volunteers = await Volunteer.find(); // Assuming Volunteer schema has a phoneNumber field
+
+    // Notify volunteers via SMS
+    const smsPromises = volunteers.map((volunteer) => {
+      // Generate Google Maps link
+      const latitudeMatch = location.match(/Latitude:\s*([\d.-]+)/);
+      const longitudeMatch = location.match(/Longitude:\s*([\d.-]+)/);
+      
+      const googleMapsLink = `https://www.google.com/maps?q=${latitudeMatch[1]},${longitudeMatch[1]}`;
+      return client.messages.create({
+        body: `New disaster report: ${description}. Location: ${googleMapsLink}. Type: ${type}, Severity: ${severity}.`,
+        from: twilioPhoneNumber,
+        to: volunteer.phoneNumber,
+      });
+    });
+
+    await Promise.all(smsPromises);
+
+    res
+      .status(201)
+      .send("Report submitted successfully and volunteers notified");
+      console.log("notif done");
   } catch (error) {
     res.status(400).send(error.message);
   }
